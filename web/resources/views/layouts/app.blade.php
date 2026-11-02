@@ -9,16 +9,16 @@
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
 @php
     $user = auth()->user();
-    // Laporan and Pengguna pages are built in the next stage of Fase 3.
+    // The Pengguna page is built later in Fase 3.
     $navigation = $user->isAdmin()
         ? [
             ['label' => 'Dashboard', 'href' => route('admin.dashboard'), 'active' => request()->routeIs('admin.dashboard')],
-            ['label' => 'Laporan', 'href' => url('/reports'), 'active' => request()->is('reports*')],
+            ['label' => 'Laporan', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*')],
             ['label' => 'Pengguna', 'href' => url('/admin/users'), 'active' => request()->is('admin/users*')],
         ]
         : [
             ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-            ['label' => 'Laporan Saya', 'href' => url('/reports'), 'active' => request()->is('reports*')],
+            ['label' => 'Laporan Saya', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*')],
         ];
 @endphp
 
