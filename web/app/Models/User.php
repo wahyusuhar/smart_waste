@@ -68,4 +68,10 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::Admin;
     }
+
+    // Name of the route each role lands on after login.
+    public function dashboardRoute(): string
+    {
+        return $this->isAdmin() ? 'admin.dashboard' : 'dashboard';
+    }
 }

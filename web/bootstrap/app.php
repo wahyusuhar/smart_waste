@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\ClassifierException;
+use App\Http\Middleware\EnsureUserHasRole;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // API clients get a 401 JSON response instead of a redirect to the web login page.
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : route('login'));
+        // A logged-in user opening /login is sent to the dashboard for their role.
+        $middleware->redirectUsersTo(fn (Request $request) => route($request->user()->dashboardRoute()));
+
+        $middleware->alias([
+            'role' => EnsureUserHasRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Mobile clients may omit the Accept header; API errors must still be JSON.
