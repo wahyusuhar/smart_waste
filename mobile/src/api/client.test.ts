@@ -1,3 +1,5 @@
+import { File } from 'expo-file-system';
+
 import {
   ApiError,
   NETWORK_ERROR_MESSAGE,
@@ -11,6 +13,9 @@ import {
 } from './client';
 
 jest.mock('../config', () => ({ API_URL: 'http://api.test/api' }));
+jest.mock('expo-file-system', () => ({
+  File: jest.fn().mockImplementation((uri: string) => ({ uri, name: 'foto.jpg', type: 'image/jpeg' })),
+}));
 
 const fetchMock = jest.fn();
 globalThis.fetch = fetchMock as unknown as typeof fetch;
@@ -114,6 +119,8 @@ test('503 from classify keeps the server message about the AI service', async ()
   expect(url).toBe('http://api.test/api/classify');
   expect(options.body).toBeInstanceOf(FormData);
   expect(options.headers['Content-Type']).toBeUndefined();
+  // The photo is sent as an expo-file-system File, the only file form Expo's fetch accepts.
+  expect(File).toHaveBeenCalledWith('file:///foto.jpg');
 });
 
 test('network failure becomes status 0 with a connection message', async () => {

@@ -1,3 +1,5 @@
+import { File } from 'expo-file-system';
+
 import { API_URL } from '../config';
 import type {
   AuthResult,
@@ -130,9 +132,10 @@ function firstErrors(errors: unknown): Record<string, string> {
   );
 }
 
-// React Native's FormData accepts { uri, name, type } for files, which the DOM typings do not describe.
-function photoPart(uri: string): Blob {
-  return { uri, name: 'foto.jpg', type: 'image/jpeg' } as unknown as Blob;
+// Expo's fetch rejects React Native's { uri, name, type } file parts; it needs a real Blob,
+// which expo-file-system's File is (name and type come from the file itself).
+function photoPart(uri: string): File {
+  return new File(uri);
 }
 
 export async function login(email: string, password: string): Promise<AuthResult> {
