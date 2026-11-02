@@ -20,4 +20,9 @@
             <x-button type="submit" class="w-full">Masuk</x-button>
         </form>
     </x-card>
+
+    <p class="mt-4 text-center text-sm text-gray-600">
+        Belum punya akun?
+        <a href="{{ route('register') }}" class="font-medium text-accent hover:text-accent-hover">Daftar</a>
+    </p>
 @endsection
