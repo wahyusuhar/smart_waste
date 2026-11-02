@@ -40,7 +40,7 @@ class ReportShowTest extends TestCase
         $this->actingAs($user)
             ->get("/reports/{$report->id}")
             ->assertOk()
-            ->assertSee('-7.3605123, 109.9026456')
+            ->assertSee('-7.360512, 109.902646')
             ->assertSee('reportMap({ latitude: -7.3605123, longitude: 109.9026456 })', false)
             ->assertSee('https://www.google.com/maps/search/?api=1&amp;query=-7.3605123,109.9026456', false);
     }

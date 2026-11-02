@@ -51,7 +51,7 @@
 
                 <dl class="divide-y divide-gray-100">
                     <x-detail-row label="Koordinat">
-                        <span class="tabular-nums">{{ $report->latitude }}, {{ $report->longitude }}</span>
+                        <span class="tabular-nums">{{ $report->formattedCoordinates() }}</span>
                     </x-detail-row>
                     <x-detail-row label="Alamat/patokan">{{ $report->address ?? '—' }}</x-detail-row>
                 </dl>

@@ -80,6 +80,16 @@ class Report extends Model
         });
     }
 
+    /**
+     * "lat, lng" with at most 6 decimals (about 10 cm) and no trailing zeros, e.g. "-7.36, 109.902646".
+     */
+    public function formattedCoordinates(): string
+    {
+        $format = fn ($value) => rtrim(rtrim(number_format((float) $value, 6, '.', ''), '0'), '.');
+
+        return $format($this->latitude).', '.$format($this->longitude);
+    }
+
     protected function photoUrl(): Attribute
     {
         return Attribute::get(fn () => Storage::disk('public')->url($this->photo_path));

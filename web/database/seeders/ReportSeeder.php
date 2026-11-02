@@ -28,42 +28,58 @@ class ReportSeeder extends Seeder
         ['completed' => 10, 'rejected' => 4],
     ];
 
-    private const LOCATIONS = [
-        ['Jl. Pasar Induk, Kel. Wonosobo Timur', -7.3594, 109.9055],
-        ['Jl. Ahmad Yani, dekat Alun-alun Wonosobo', -7.3622, 109.9017],
-        ['Terminal Mendolo, Kel. Bumireso', -7.3790, 109.9118],
-        ['Jl. Raya Kertek, Kec. Kertek', -7.3868, 109.9466],
-        ['Jl. Dieng, Kec. Garung', -7.3047, 109.9287],
-        ['Jl. Raya Selomerto, Kec. Selomerto', -7.4052, 109.8712],
-        ['Desa Wonokerto, Kec. Leksono', -7.3955, 109.8402],
-        ['Jl. Bambang Sugeng, Kec. Mojotengah', -7.3401, 109.8995],
-        ['Taman Kota Plaza Wonosobo', -7.3612, 109.9036],
-        ['Bantaran Sungai Serayu, Kel. Kalianget', -7.3524, 109.9178],
+    /**
+     * Real places in Wonosobo, coordinates taken from OpenStreetMap (Nominatim, November 2026).
+     * Every point is on or next to a road. Public so the seeder test can check the jitter.
+     *
+     * @var list<array{0: string, 1: float, 2: float}>
+     */
+    public const LOCATIONS = [
+        ['Sisi Alun-alun Wonosobo, Jlegong', -7.3587052, 109.9030423],
+        ['Depan Pasar Induk Wonosobo, Jl. Jenderal Ahmad Yani', -7.3626523, 109.9019097],
+        ['Masjid Agung Jami\' Wonosobo, Jl. Pemuda', -7.3592432, 109.9009262],
+        ['Sekitar SD Negeri 1 Wonosobo, Jl. Merdeka', -7.3575456, 109.9010908],
+        ['Plaza Wonosobo, pusat kota', -7.3638087, 109.9023595],
+        ['Terminal Mendolo, Jl. Raya Kertek', -7.3677503, 109.9244498],
+        ['GOR Kalianget, Kalianget', -7.3332832, 109.9084574],
+        ['Depan kampus UNSIQ, Jl. Kalibeber, Mojotengah', -7.3298078, 109.9015305],
+        ['Pasar Garung, Jl. Dieng, Garung', -7.2954806, 109.9219787],
+        ['Pasar Kertek, Mlandi, Kertek', -7.3899466, 109.9633872],
+        ['Sekitar SMK Negeri 1 Kalikajar, Perigi', -7.4055621, 109.9708618],
+        ['Pasar Selomerto, Jl. Raya Wonosobo–Banjarnegara', -7.4145399, 109.8845672],
+        ['Tepi sungai dekat Jembatan Cantel, Dermayu, Selomerto', -7.4178189, 109.8900037],
+        ['Tepi sungai dekat Jembatan Begaluh, Selonggoro', -7.4242067, 109.8723883],
+        ['Sekitar SMA Negeri 1 Watumalang, Jl. Kuripan–Binangun', -7.3419077, 109.8615914],
+        ['Pasar Kaliwiro, Jl. Lingkar Kalijati', -7.4576867, 109.8566830],
     ];
 
+    // Roughly 50 m expressed in degrees, so repeated places are not exactly on the same spot.
+    private const JITTER_DEGREES = 0.00045;
+
+    // Descriptions avoid naming a type of place (market, school, river): the address says where it is.
     private const DESCRIPTIONS = [
         'organic' => [
-            'Sisa sayur dan buah dari pedagang pasar menumpuk di pinggir jalan dan mulai berbau.',
+            'Sisa sayur dan buah menumpuk di pinggir jalan dan mulai berbau.',
             'Daun dan ranting bekas pemangkasan pohon belum diangkut sejak tiga hari lalu.',
-            'Sisa makanan dari warung dibuang ke saluran air sehingga aliran air tersumbat.',
-            'Kulit jagung dan sisa panen sayur dibuang di tepi sungai, banyak lalat.',
-            'Sampah dapur di bak sampah depan gang sudah meluber ke jalan.',
-            'Batang pisang dan daun kering menumpuk di lahan kosong dekat permukiman.',
+            'Sisa makanan dibuang ke selokan sehingga aliran air tersumbat.',
+            'Kulit jagung dan sisa sayur dibuang sembarangan, banyak lalat.',
+            'Sampah dapur di bak sampah sudah meluber ke jalan.',
+            'Batang pisang dan daun kering menumpuk di sudut jalan.',
         ],
         'plastic' => [
-            'Botol plastik dan kantong kresek menyangkut di saluran irigasi.',
-            'Kemasan plastik makanan berserakan di area parkir setelah acara akhir pekan.',
-            'Gelas plastik bekas minuman menumpuk di samping halte dan tertiup angin ke jalan.',
+            'Botol plastik dan kantong kresek menyangkut di selokan.',
+            'Kemasan plastik makanan berserakan setelah acara akhir pekan.',
+            'Gelas plastik bekas minuman menumpuk dan tertiup angin ke jalan.',
             'Karung berisi sampah plastik ditinggalkan di bahu jalan.',
-            'Sedotan dan bungkus plastik memenuhi selokan depan sekolah.',
-            'Kantong plastik menumpuk di tepi sungai, sebagian sudah hanyut terbawa arus.',
+            'Sedotan dan bungkus plastik memenuhi saluran air.',
+            'Kantong plastik menumpuk dan sebagian terbawa air saat hujan.',
         ],
         'paper' => [
-            'Kardus bekas dari toko dibuang di trotoar dan basah terkena hujan.',
-            'Tumpukan kertas dan koran bekas di belakang tempat fotokopi.',
-            'Kotak makanan kertas bekas acara hajatan ditinggalkan di lapangan.',
-            'Brosur dan pamflet berserakan di sekitar alun-alun.',
-            'Karton bekas kemasan sayur ditumpuk di sudut pasar.',
+            'Kardus bekas dibuang di trotoar dan basah terkena hujan.',
+            'Tumpukan kertas dan koran bekas ditinggalkan di pinggir jalan.',
+            'Kotak makanan kertas bekas acara ditinggalkan begitu saja.',
+            'Brosur dan pamflet berserakan di sepanjang trotoar.',
+            'Karton bekas kemasan ditumpuk di sudut jalan.',
             'Kardus dan kertas bekas menutupi sebagian badan jalan.',
         ],
     ];
@@ -106,12 +122,14 @@ class ReportSeeder extends Seeder
         $admin = User::where('role', UserRole::Admin)->firstOrFail();
         $reporters = User::where('role', UserRole::User)->orderBy('id')->get();
         $descriptionCursor = [];
+        // Taken in turn from a shuffled list, so every place gets 2-3 reports instead of a random pile-up.
+        $locations = $this->random->shuffleArray(self::LOCATIONS);
 
         foreach ($this->statusesNewestFirst() as $i => $status) {
             $daysAgo = (int) round($i * 1.5) + $this->random->getInt(0, 1);
             $createdAt = $this->pastTime(now()->subDays($daysAgo)->setTime($this->random->getInt(6, 18), $this->random->getInt(0, 59)));
             $category = $this->pick(ReportCategory::cases());
-            [$address, $lat, $lng] = $this->pick(self::LOCATIONS);
+            [$address, $lat, $lng] = $locations[$i % count($locations)];
 
             $descriptionCursor[$category->value] = ($descriptionCursor[$category->value] ?? -1) + 1;
             $descriptions = self::DESCRIPTIONS[$category->value];
@@ -122,8 +140,8 @@ class ReportSeeder extends Seeder
             $report = new Report([
                 'description' => $description,
                 'photo_path' => $this->storePhoto($i, $category),
-                'latitude' => $lat + $this->random->getInt(-20, 20) / 10000,
-                'longitude' => $lng + $this->random->getInt(-20, 20) / 10000,
+                'latitude' => round($lat + $this->jitter(), 7),
+                'longitude' => round($lng + $this->jitter(), 7),
                 'address' => $address.', Wonosobo',
                 'category' => $category,
                 'ai_label' => $aiLabel,
@@ -211,7 +229,17 @@ class ReportSeeder extends Seeder
             $lastNote = $note ?? $lastNote;
         }
 
+        // updated_at must equal the last status change. With timestamps on, Eloquent would replace an
+        // unchanged updated_at (a report still Pending) with the time the seeder runs.
+        $report->timestamps = false;
         $report->forceFill(['admin_note' => $lastNote, 'updated_at' => $time])->save();
+    }
+
+    private function jitter(): float
+    {
+        $steps = (int) round(self::JITTER_DEGREES * 100000);
+
+        return $this->random->getInt(-$steps, $steps) / 100000;
     }
 
     private function loadPhotoPools(): void
