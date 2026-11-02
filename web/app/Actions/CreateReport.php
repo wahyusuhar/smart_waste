@@ -7,7 +7,6 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 /**
@@ -20,7 +19,7 @@ class CreateReport
      */
     public function handle(User $reporter, UploadedFile $photo, array $attributes): Report
     {
-        $photoPath = $photo->store('reports', 'public');
+        $photoPath = $photo->store('reports', config('filesystems.photo_disk'));
 
         try {
             return DB::transaction(function () use ($reporter, $attributes, $photoPath) {
@@ -37,7 +36,7 @@ class CreateReport
             });
         } catch (Throwable $e) {
             // Without a database row the stored photo would be an orphan file.
-            Storage::disk('public')->delete($photoPath);
+            Report::photoDisk()->delete($photoPath);
 
             throw $e;
         }

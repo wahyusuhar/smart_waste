@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Admin\Users;
 
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -38,7 +38,7 @@ class Index extends Component
         // The database removes the reports (cascade), but not their photo files, so collect them first.
         $photoPaths = $user->reports()->pluck('photo_path')->all();
         $user->delete();
-        Storage::disk('public')->delete($photoPaths);
+        Report::photoDisk()->delete($photoPaths);
 
         session()->flash('status', "Pengguna {$user->name} beserta laporannya telah dihapus.");
         $this->redirectRoute('admin.users.index');

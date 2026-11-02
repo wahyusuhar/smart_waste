@@ -8,7 +8,6 @@ use App\Models\Report;
 use DomainException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -55,7 +54,7 @@ class Show extends Component
 
         $photoPath = $this->report->photo_path;
         $this->report->delete();
-        Storage::disk('public')->delete($photoPath);
+        Report::photoDisk()->delete($photoPath);
 
         session()->flash('status', 'Laporan berhasil dihapus.');
         $this->redirectRoute('reports.index');

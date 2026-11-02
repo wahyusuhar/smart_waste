@@ -9,7 +9,6 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 use Random\Engine\Mt19937;
 use Random\Randomizer;
 
@@ -117,7 +116,7 @@ class ReportSeeder extends Seeder
         // Fixed seed: every run produces the same demo data.
         $this->random = new Randomizer(new Mt19937(42));
         $this->loadPhotoPools();
-        Storage::disk('public')->deleteDirectory(self::PHOTO_DIR);
+        Report::photoDisk()->deleteDirectory(self::PHOTO_DIR);
 
         $admin = User::where('role', UserRole::Admin)->firstOrFail();
         $reporters = User::where('role', UserRole::User)->orderBy('id')->get();
@@ -268,7 +267,7 @@ class ReportSeeder extends Seeder
 
         if ($pool === []) {
             $path = self::PHOTO_DIR."/report-{$index}.jpg";
-            Storage::disk('public')->put($path, $this->placeholderJpeg());
+            Report::photoDisk()->put($path, $this->placeholderJpeg());
 
             return $path;
         }
@@ -278,7 +277,7 @@ class ReportSeeder extends Seeder
         $source = $pool[$cursor % count($pool)];
         $extension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
         $path = self::PHOTO_DIR."/report-{$index}.{$extension}";
-        Storage::disk('public')->put($path, file_get_contents($source));
+        Report::photoDisk()->put($path, file_get_contents($source));
 
         return $path;
     }

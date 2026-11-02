@@ -47,6 +47,14 @@ return [
             'report' => false,
         ],
 
+        // Used for report photos in production, where the server's own disk is wiped on every restart.
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+            'url' => env('CLOUDINARY_URL'),
+            'throw' => true,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -61,6 +69,17 @@ return [
         ],
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Report Photo Disk
+    |--------------------------------------------------------------------------
+    |
+    | "public" locally (storage/app/public), "cloudinary" on Render.
+    |
+    */
+
+    'photo_disk' => env('PHOTO_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------

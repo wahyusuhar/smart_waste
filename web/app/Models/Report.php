@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Enums\ReportCategory;
 use App\Enums\ReportStatus;
+use Cloudinary\Cloudinary;
 use Database\Factories\ReportFactory;
 use DomainException;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -90,9 +92,28 @@ class Report extends Model
         return $format($this->latitude).', '.$format($this->longitude);
     }
 
+    /**
+     * Where report photos are stored: storage/app/public locally, Cloudinary on Render (config/filesystems.php).
+     */
+    public static function photoDisk(): Filesystem
+    {
+        return Storage::disk(config('filesystems.photo_disk'));
+    }
+
     protected function photoUrl(): Attribute
     {
-        return Attribute::get(fn () => Storage::disk('public')->url($this->photo_path));
+        return Attribute::get(function () {
+            // The Cloudinary adapter's url() asks the Admin API for every photo (one rate-limited HTTP call
+            // each), while the delivery URL can be built locally from the public ID, which is the path
+            // without its extension.
+            if (config('filesystems.disks.'.config('filesystems.photo_disk').'.driver') === 'cloudinary') {
+                $publicId = preg_replace('/\.[^.\/]+$/', '', $this->photo_path);
+
+                return (string) app(Cloudinary::class)->image($publicId)->toUrl();
+            }
+
+            return self::photoDisk()->url($this->photo_path);
+        });
     }
 
     public function user(): BelongsTo
