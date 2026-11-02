@@ -1,0 +1,21 @@
+.env
+.env.*
+!.env.example
+
+CLAUDE.md
+.claude/
+AGENTS.md
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dataset tidak di-commit; sumber dan cara unduh dicatat di ml/DATASET.md
+ml/dataset/
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
