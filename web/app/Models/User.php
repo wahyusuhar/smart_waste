@@ -30,6 +30,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    // Mirrors the column default so a freshly registered user already has a role.
+    protected $attributes = [
+        'role' => 'user',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
