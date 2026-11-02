@@ -23,6 +23,7 @@ class StoreReportRequest extends FormRequest
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'description' => ['required', 'string', 'max:1000'],
+            'address' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', Rule::enum(ReportCategory::class)],
             // The model's labels are the same three values as the report categories.
             'ai_label' => ['nullable', 'required_with:ai_confidence', Rule::enum(ReportCategory::class)],

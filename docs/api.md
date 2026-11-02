@@ -230,6 +230,7 @@ Body `multipart/form-data`:
 | `latitude` | wajib, angka −90 sampai 90 |
 | `longitude` | wajib, angka −180 sampai 180 |
 | `description` | wajib, maks. 1000 karakter |
+| `address` | opsional, alamat atau patokan lokasi, maks. 255 karakter |
 | `category` | opsional, kategori final pilihan user |
 | `ai_label` | opsional, hasil `POST /api/classify`; wajib jika `ai_confidence` diisi |
 | `ai_confidence` | opsional, angka 0 sampai 1; wajib jika `ai_label` diisi |

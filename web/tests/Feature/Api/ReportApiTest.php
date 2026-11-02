@@ -57,6 +57,20 @@ class ReportApiTest extends TestCase
         ]);
     }
 
+    public function test_report_can_include_optional_address(): void
+    {
+        Storage::fake('public');
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->post('/api/reports', [...$this->validPayload(), 'address' => 'Samping halte Terminal Mendolo'], ['Accept' => 'application/json'])
+            ->assertCreated()
+            ->assertJsonPath('data.address', 'Samping halte Terminal Mendolo');
+
+        $this->post('/api/reports', [...$this->validPayload(), 'address' => str_repeat('a', 256)], ['Accept' => 'application/json'])
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.address.0', 'Alamat/patokan tidak boleh lebih dari 255 karakter.');
+    }
+
     public static function invalidReportProvider(): array
     {
         return [

@@ -27,6 +27,7 @@ return [
     'uploaded' => ':Attribute gagal diunggah.',
 
     'attributes' => [
+        'address' => 'alamat/patokan',
         'ai_confidence' => 'confidence AI',
         'ai_label' => 'label AI',
         'category' => 'kategori',
