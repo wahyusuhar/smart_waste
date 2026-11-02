@@ -59,6 +59,7 @@ function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
 
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="login" />
+          <Stack.Screen name="register" />
         </Stack.Protected>
       </Stack>
     </>

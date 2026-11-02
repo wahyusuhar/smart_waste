@@ -1,5 +1,6 @@
+import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ApiError, SERVER_ERROR_MESSAGE } from '../api/client';
@@ -12,6 +13,7 @@ import { colors, fonts, type } from '../theme';
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
+  const router = useRouter();
   const passwordRef = useRef<TextFieldRef>(null);
 
   const [email, setEmail] = useState('');
@@ -83,6 +85,13 @@ export default function LoginScreen() {
               <Button title="Masuk" loadingTitle="Memproses…" loading={submitting} onPress={submit} />
             </View>
           </Card>
+
+          <View style={styles.switchRow}>
+            <Text style={styles.switchText}>Belum punya akun?</Text>
+            <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.push('/register')} disabled={submitting}>
+              <Text style={styles.switchLink}>Daftar</Text>
+            </Pressable>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -115,5 +124,21 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 4,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 4,
+    marginTop: 16,
+  },
+  switchText: {
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    color: colors.gray600,
+  },
+  switchLink: {
+    fontFamily: fonts.medium,
+    fontSize: 14,
+    color: colors.accent,
   },
 });
