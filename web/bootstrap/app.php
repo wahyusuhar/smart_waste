@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // On Render every request arrives through its proxy. Trusting it gives the real client IP
+        // (so throttle:5,1 counts per user, not per proxy) and makes generated URLs use https.
+        $middleware->trustProxies(at: '*');
         // API clients get a 401 JSON response instead of a redirect to the web login page.
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : route('login'));
         // A logged-in user opening /login is sent to the dashboard for their role.
