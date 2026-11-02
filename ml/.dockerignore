@@ -1,0 +1,8 @@
+.venv
+api/.venv
+api/tests
+**/__pycache__
+**/.pytest_cache
+dataset
+reports
+models/*.keras

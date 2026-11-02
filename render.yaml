@@ -1,0 +1,85 @@
+# Render Blueprint: the Laravel website/API and the FastAPI classifier, both as free Docker web services.
+# Values marked "sync: false" are secrets or depend on other accounts (Aiven, Cloudinary); Render asks
+# for them once, when the Blueprint is first created. They are never stored in this file.
+services:
+  - type: web
+    name: smart-waste-ml
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./ml/api/Dockerfile
+    dockerContext: ./ml
+    healthCheckPath: /health
+    # Only rebuild when the service or its model changes.
+    buildFilter:
+      paths:
+        - ml/api/**
+        - ml/models/**
+    envVars:
+      - key: ML_SERVICE_TOKEN
+        sync: false
+
+  - type: web
+    name: smart-waste-web
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./web/Dockerfile
+    dockerContext: ./web
+    healthCheckPath: /up
+    buildFilter:
+      paths:
+        - web/**
+    envVars:
+      - key: APP_NAME
+        value: Smart Waste
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: APP_TIMEZONE
+        value: Asia/Jakarta
+      - key: APP_LOCALE
+        value: id
+      - key: APP_FALLBACK_LOCALE
+        value: en
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        value: defaultdb
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # ca.pem from Aiven is uploaded as a Secret File, which Render places in /etc/secrets/.
+      - key: MYSQL_ATTR_SSL_CA
+        value: /etc/secrets/ca.pem
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: CACHE_STORE
+        value: database
+      - key: PHOTO_DISK
+        value: cloudinary
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: ML_SERVICE_URL
+        sync: false
+      # Below the app's 60-second upload timeout, so a cold ML service ends in a clear 503 message.
+      - key: ML_SERVICE_TIMEOUT
+        value: "50"
+      - key: ML_SERVICE_TOKEN
+        sync: false
