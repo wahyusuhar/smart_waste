@@ -397,3 +397,4 @@ Konfigurasi di `web/.env`:
 |---|---|---|
 | `ML_SERVICE_URL` | `http://127.0.0.1:8001` | Alamat servis FastAPI |
 | `ML_SERVICE_TIMEOUT` | `10` | Batas waktu respons dalam detik. Batas waktu koneksi tetap 3 detik. |
+| `ML_SERVICE_TOKEN` | kosong | Dikirim sebagai header `X-ML-Token` ke FastAPI. Jika di FastAPI diisi, `/predict` tanpa token yang sama ditolak dengan `401` dan Laravel meneruskannya sebagai `502`. Kosong berarti tidak dikirim dan tidak dicek. |

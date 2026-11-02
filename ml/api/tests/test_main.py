@@ -73,6 +73,22 @@ def test_predict_rejects_file_over_5_mb(client):
     assert response.status_code == 413
 
 
+def test_predict_checks_token_when_configured(client, monkeypatch):
+    monkeypatch.setattr("main.ML_TOKEN", "rahasia-123")
+    files = {"file": ("photo.jpg", make_image("JPEG"), "image/jpeg")}
+
+    assert client.post("/predict", files=files).status_code == 401
+    assert client.post("/predict", files=files, headers={"X-ML-Token": "salah"}).status_code == 401
+    assert client.post("/predict", files=files, headers={"X-ML-Token": "rahasia-123"}).status_code == 200
+
+
+def test_health_does_not_need_token(client, monkeypatch):
+    # Render's health check calls /health without any header.
+    monkeypatch.setattr("main.ML_TOKEN", "rahasia-123")
+
+    assert client.get("/health").status_code == 200
+
+
 def test_predict_requires_file_field(client):
     response = client.post("/predict")
 

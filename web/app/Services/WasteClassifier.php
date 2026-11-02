@@ -26,6 +26,8 @@ class WasteClassifier
         try {
             $response = Http::connectTimeout(3)
                 ->timeout(config('services.ml.timeout'))
+                // The ML service is public on Render, so it only answers requests carrying this token.
+                ->withHeaders(array_filter(['X-ML-Token' => config('services.ml.token')]))
                 // FastAPI checks the part's Content-Type, so it must be sent explicitly.
                 ->attach('file', $photo->get(), $photo->getClientOriginalName(), ['Content-Type' => $photo->getMimeType()])
                 ->post($url);

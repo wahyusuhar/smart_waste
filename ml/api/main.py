@@ -1,3 +1,4 @@
+import hmac
 import io
 import json
 import logging
@@ -8,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 from ai_edge_litert.interpreter import Interpreter
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
@@ -20,6 +21,9 @@ IMAGE_SIZE = 224
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png"}
 ALLOWED_FORMATS = {"JPEG", "PNG"}
+# On Render this service is public, so /predict only answers Laravel, which sends the same value
+# in the X-ML-Token header. Empty (the local default) turns the check off.
+ML_TOKEN = os.environ.get("ML_SERVICE_TOKEN", "")
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -82,12 +86,16 @@ def health():
     response_model=PredictResponse,
     responses={
         400: {"model": ErrorResponse, "description": "File bukan gambar yang valid"},
+        401: {"model": ErrorResponse, "description": "Header X-ML-Token salah atau tidak ada"},
         413: {"model": ErrorResponse, "description": "File lebih dari 5 MB"},
         415: {"model": ErrorResponse, "description": "Format selain JPG/PNG"},
         503: {"model": ErrorResponse, "description": "Model belum dimuat"},
     },
 )
-def predict(file: UploadFile = File(...)):
+def predict(file: UploadFile = File(...), x_ml_token: str | None = Header(default=None)):
+    # compare_digest takes the same time however many characters match, so the token cannot be guessed by timing.
+    if ML_TOKEN and not hmac.compare_digest(x_ml_token or "", ML_TOKEN):
+        raise HTTPException(status_code=401, detail="Token tidak valid.")
     if app.state.interpreter is None:
         raise HTTPException(status_code=503, detail="Model belum siap.")
     if file.content_type not in ALLOWED_CONTENT_TYPES:

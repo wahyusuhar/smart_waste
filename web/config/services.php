@@ -38,6 +38,8 @@ return [
     'ml' => [
         'url' => env('ML_SERVICE_URL', 'http://127.0.0.1:8001'),
         'timeout' => (int) env('ML_SERVICE_TIMEOUT', 10),
+        // Shared secret sent as X-ML-Token; must match the FastAPI service. Empty locally.
+        'token' => env('ML_SERVICE_TOKEN'),
     ],
 
 ];

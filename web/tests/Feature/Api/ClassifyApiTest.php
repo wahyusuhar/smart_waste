@@ -51,6 +51,19 @@ class ClassifyApiTest extends TestCase
             && $request->hasFile('file'));
     }
 
+    public function test_ml_token_is_sent_only_when_configured(): void
+    {
+        $prediction = ['label' => 'paper', 'confidence' => 0.8, 'probabilities' => ['organic' => 0.1, 'plastic' => 0.1, 'paper' => 0.8]];
+        Http::fake(['ml.test/predict' => Http::response($prediction)]);
+
+        $this->classify()->assertOk();
+        Http::assertSent(fn (Request $request) => ! $request->hasHeader('X-ML-Token'));
+
+        config(['services.ml.token' => 'rahasia-123']);
+        $this->classify()->assertOk();
+        Http::assertSent(fn (Request $request) => $request->header('X-ML-Token') === ['rahasia-123']);
+    }
+
     public function test_returns_503_when_ml_service_is_down(): void
     {
         Http::fake(['ml.test/*' => Http::failedConnection()]);
