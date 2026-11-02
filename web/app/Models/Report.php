@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Enums\ReportCategory;
 use App\Enums\ReportStatus;
 use Database\Factories\ReportFactory;
+use DomainException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class Report extends Model
@@ -47,6 +49,35 @@ class Report extends Model
             'category' => ReportCategory::class,
             'status' => ReportStatus::class,
         ];
+    }
+
+    /**
+     * Moves the report to a new status and records who did it in the status log.
+     *
+     * @throws DomainException when the transition is not allowed (see ReportStatus::nextStatuses()).
+     */
+    public function changeStatus(ReportStatus $to, ?string $note, User $changedBy): void
+    {
+        if (! $this->status->canMoveTo($to)) {
+            throw new DomainException("Cannot change status from {$this->status->value} to {$to->value}.");
+        }
+
+        DB::transaction(function () use ($to, $note, $changedBy) {
+            $from = $this->status;
+
+            // admin_note shows the latest note to the reporter; an empty note keeps the previous one.
+            $this->forceFill([
+                'status' => $to,
+                'admin_note' => $note ?? $this->admin_note,
+            ])->save();
+
+            $this->statusLogs()->create([
+                'changed_by' => $changedBy->id,
+                'from_status' => $from,
+                'to_status' => $to,
+                'note' => $note,
+            ]);
+        });
     }
 
     protected function photoUrl(): Attribute

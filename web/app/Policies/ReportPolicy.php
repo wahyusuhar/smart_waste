@@ -24,6 +24,12 @@ class ReportPolicy
         return $user->isAdmin() || $this->isPendingOwner($user, $report);
     }
 
+    // Only admins handle reports; the owner can never change the status.
+    public function updateStatus(User $user, Report $report): bool
+    {
+        return $user->isAdmin();
+    }
+
     private function isPendingOwner(User $user, Report $report): bool
     {
         return $report->user_id === $user->id && $report->status === ReportStatus::Pending;

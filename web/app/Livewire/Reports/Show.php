@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Reports;
 
+use App\Enums\ReportStatus;
+use App\Livewire\Forms\StatusForm;
 use App\Models\Report;
+use DomainException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -15,11 +18,35 @@ class Show extends Component
     #[Locked]
     public Report $report;
 
+    public StatusForm $statusForm;
+
     public function mount(Report $report): void
     {
         Gate::authorize('view', $report);
 
         $this->report = $report;
+    }
+
+    public function updateStatus(): void
+    {
+        Gate::authorize('updateStatus', $this->report);
+
+        $this->statusForm->validate();
+
+        try {
+            $this->report->changeStatus(
+                ReportStatus::from($this->statusForm->status),
+                trim($this->statusForm->note) ?: null,
+                auth()->user(),
+            );
+        } catch (DomainException) {
+            $this->addError('statusForm.status', 'Perubahan ke status ini tidak diizinkan.');
+
+            return;
+        }
+
+        session()->flash('status', 'Status laporan diubah menjadi '.$this->report->status->label().'.');
+        $this->redirectRoute('reports.show', $this->report);
     }
 
     public function delete(): void
@@ -42,6 +69,10 @@ class Show extends Component
             'isAdmin' => auth()->user()->isAdmin(),
             'canUpdate' => Gate::allows('update', $this->report),
             'canDelete' => Gate::allows('delete', $this->report),
+            'canUpdateStatus' => Gate::allows('updateStatus', $this->report),
+            'nextStatusOptions' => collect($this->report->status->nextStatuses())
+                ->mapWithKeys(fn (ReportStatus $status) => [$status->value => $status->label()])
+                ->all(),
         ])->title('Laporan #'.$this->report->id);
     }
 }

@@ -68,6 +68,36 @@
         </div>
 
         <div class="space-y-6">
+            @if ($canUpdateStatus)
+                <x-card title="Ubah status">
+                    @if ($nextStatusOptions === [])
+                        <p class="px-4 py-3 text-sm text-gray-500">Status {{ $report->status->label() }} sudah final dan tidak dapat diubah lagi.</p>
+                    @else
+                        <form wire:submit="updateStatus" class="space-y-4 p-4">
+                            <x-select
+                                label="Status baru"
+                                name="statusForm.status"
+                                wire:model="statusForm.status"
+                                :options="$nextStatusOptions"
+                                placeholder="Pilih status"
+                            />
+                            <x-textarea
+                                label="Catatan"
+                                name="statusForm.note"
+                                wire:model="statusForm.note"
+                                rows="3"
+                                maxlength="1000"
+                                hint="Wajib diisi jika laporan ditolak. Catatan ini terlihat oleh pelapor."
+                            />
+                            <x-button type="submit" class="w-full" wire:loading.attr="disabled" wire:target="updateStatus">
+                                <span wire:loading.remove wire:target="updateStatus">Simpan Status</span>
+                                <span wire:loading wire:target="updateStatus">Menyimpan…</span>
+                            </x-button>
+                        </form>
+                    @endif
+                </x-card>
+            @endif
+
             <x-card title="Status">
                 <dl class="divide-y divide-gray-100">
                     <x-detail-row label="Status"><x-status-badge :status="$report->status" /></x-detail-row>
