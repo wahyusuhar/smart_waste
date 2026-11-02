@@ -28,6 +28,23 @@ class ReportShowTest extends TestCase
             ->assertSee('Laporan dibuat');
     }
 
+    public function test_detail_shows_coordinates_map_and_google_maps_link(): void
+    {
+        $user = User::factory()->create();
+        $report = Report::factory()->for($user)->create([
+            'latitude' => -7.3605123,
+            'longitude' => 109.9026456,
+        ]);
+
+        // The coordinates are rendered as text by the server, so they are shown even when map tiles fail to load.
+        $this->actingAs($user)
+            ->get("/reports/{$report->id}")
+            ->assertOk()
+            ->assertSee('-7.3605123, 109.9026456')
+            ->assertSee('reportMap({ latitude: -7.3605123, longitude: 109.9026456 })', false)
+            ->assertSee('https://www.google.com/maps/search/?api=1&amp;query=-7.3605123,109.9026456', false);
+    }
+
     public function test_user_cannot_view_other_users_report(): void
     {
         $report = Report::factory()->create();

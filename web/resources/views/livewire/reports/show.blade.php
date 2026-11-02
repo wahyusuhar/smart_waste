@@ -34,6 +34,21 @@
             </x-card>
 
             <x-card title="Lokasi">
+                <x-slot:actions>
+                    <a
+                        href="{{ 'https://www.google.com/maps/search/?api=1&query='.$report->latitude.','.$report->longitude }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-sm font-medium text-accent hover:text-accent-hover"
+                    >Buka di Google Maps</a>
+                </x-slot:actions>
+
+                {{-- The coordinates below stay visible even if the map tiles cannot be loaded. --}}
+                <div class="border-b border-gray-200 p-4" wire:ignore x-data="reportMap({ latitude: {{ $report->latitude }}, longitude: {{ $report->longitude }} })">
+                    <div x-ref="map" class="relative z-0 h-56 rounded-md border border-gray-200 bg-gray-100" role="img" aria-label="Peta lokasi laporan"></div>
+                    <p x-show="failed" x-cloak class="mt-2 text-[13px] text-gray-500">Peta tidak dapat dimuat. Gunakan koordinat di bawah.</p>
+                </div>
+
                 <dl class="divide-y divide-gray-100">
                     <x-detail-row label="Koordinat">
                         <span class="tabular-nums">{{ $report->latitude }}, {{ $report->longitude }}</span>
