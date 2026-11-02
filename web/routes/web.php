@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\SessionController;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Users\Form as UserForm;
+use App\Livewire\Admin\Users\Index as UserIndex;
 use App\Livewire\Reports\Form as ReportForm;
 use App\Livewire\Reports\Index as ReportIndex;
 use App\Livewire\Reports\Show as ReportShow;
@@ -33,5 +35,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::livewire('/dashboard', AdminDashboard::class)->name('dashboard');
+        Route::livewire('/users', UserIndex::class)->name('users.index');
+        Route::livewire('/users/create', UserForm::class)->name('users.create');
+        Route::livewire('/users/{user}/edit', UserForm::class)->name('users.edit');
     });
 });

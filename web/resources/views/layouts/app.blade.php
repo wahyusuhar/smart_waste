@@ -9,12 +9,11 @@
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
 @php
     $user = auth()->user();
-    // The Pengguna page is built later in Fase 3.
     $navigation = $user->isAdmin()
         ? [
             ['label' => 'Dashboard', 'href' => route('admin.dashboard'), 'active' => request()->routeIs('admin.dashboard')],
             ['label' => 'Laporan', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*')],
-            ['label' => 'Pengguna', 'href' => url('/admin/users'), 'active' => request()->is('admin/users*')],
+            ['label' => 'Pengguna', 'href' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
         ]
         : [
             ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
