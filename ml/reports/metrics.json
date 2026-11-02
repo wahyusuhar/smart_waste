@@ -1,0 +1,40 @@
+{
+  "seed": 42,
+  "tensorflow_version": "2.21.0",
+  "labels": [
+    "organic",
+    "plastic",
+    "paper"
+  ],
+  "split_sizes": {
+    "train": 630,
+    "val": 135,
+    "test": 135
+  },
+  "epochs_trained": {
+    "head": 13,
+    "finetune": 4
+  },
+  "test_accuracy_keras": 0.9704,
+  "test_accuracy_tflite": 0.9704,
+  "keras_tflite_prediction_agreement": 1.0,
+  "keras_tflite_max_probability_diff": 4.023313522338867e-06,
+  "confusion_matrix": [
+    [
+      45,
+      0,
+      0
+    ],
+    [
+      0,
+      42,
+      3
+    ],
+    [
+      0,
+      1,
+      44
+    ]
+  ],
+  "training_minutes": 7.3
+}
