@@ -246,13 +246,17 @@ Index: `status`, `category`, `user_id`, `created_at`.
 |---|---|---|
 | id | bigint PK | |
 | report_id | FK → reports | cascade delete |
-| changed_by | FK → users | admin yang mengubah |
+| changed_by | FK → users, nullable | admin yang mengubah; untuk log awal (null → pending) diisi user pelapor. Null jika user tersebut sudah dihapus |
 | from_status | enum nullable | null untuk status awal |
 | to_status | enum | |
 | note | text nullable | |
 | created_at | timestamp | |
 
 Tabel bawaan Laravel (`personal_access_tokens`, `sessions`, dll.) tetap dipakai sebagaimana adanya.
+
+Perilaku foreign key saat data dihapus (diputuskan pada Fase 2, 2 November 2026):
+- `reports.user_id`: cascade delete. Menghapus user ikut menghapus laporannya.
+- `report_status_logs.changed_by`: nullable dengan `ON DELETE SET NULL`, supaya menghapus user (termasuk admin) tidak menghapus riwayat status laporan.
 
 Seeder: 1 admin, beberapa user, dan sejumlah laporan contoh dengan status bervariasi supaya dashboard tidak kosong saat demo. Data contoh harus realistis (deskripsi wajar, koordinat di sekitar Wonosobo), tidak memakai lorem ipsum.
 
