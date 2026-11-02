@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\ClassifierException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Mobile clients may omit the Accept header; API errors must still be JSON.
         $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*') || $request->expectsJson());
+
+        // An unavailable ML service is expected and already logged as a warning by WasteClassifier.
+        $exceptions->dontReport(ClassifierException::class);
 
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*')) {
