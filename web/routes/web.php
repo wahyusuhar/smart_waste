@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\SessionController;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Reports\Form as ReportForm;
 use App\Livewire\Reports\Index as ReportIndex;
+use App\Livewire\Reports\Show as ReportShow;
 use App\Livewire\User\Dashboard as UserDashboard;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
     // Shared by admins and users; what each one may see or do is checked in the components (ReportPolicy).
     Route::livewire('/reports', ReportIndex::class)->name('reports.index');
+    Route::livewire('/reports/create', ReportForm::class)->name('reports.create');
+    Route::livewire('/reports/{report}', ReportShow::class)->name('reports.show');
+    Route::livewire('/reports/{report}/edit', ReportForm::class)->name('reports.edit');
 
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::livewire('/dashboard', AdminDashboard::class)->name('dashboard');

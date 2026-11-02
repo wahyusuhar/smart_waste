@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Report
@@ -20,7 +19,7 @@ class ReportResource extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'photo_url' => Storage::disk('public')->url($this->photo_path),
+            'photo_url' => $this->photo_url,
             'latitude' => (float) $this->latitude,
             'longitude' => (float) $this->longitude,
             'address' => $this->address,

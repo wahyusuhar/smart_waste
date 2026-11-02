@@ -1,6 +1,6 @@
 <div>
     <x-page-header :title="$isAdmin ? 'Laporan' : 'Laporan Saya'" :description="$isAdmin ? 'Semua laporan sampah dari pengguna.' : 'Laporan sampah yang pernah Anda kirim.'">
-        <x-button :href="url('/reports/create')">Buat Laporan</x-button>
+        <x-button :href="route('reports.create')">Buat Laporan</x-button>
     </x-page-header>
 
     <x-card>
@@ -36,7 +36,7 @@
                     </x-empty-state>
                 @else
                     <x-empty-state message="Belum ada laporan.">
-                        <x-button :href="url('/reports/create')">Buat Laporan</x-button>
+                        <x-button :href="route('reports.create')">Buat Laporan</x-button>
                     </x-empty-state>
                 @endif
             @else
