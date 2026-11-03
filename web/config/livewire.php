@@ -139,7 +139,10 @@ return [
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload is invalidated...
-        'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
+        // Turned off on Vercel, where the temporary disk is Cloudinary: the cleanup checks every temporary
+        // file through Cloudinary's rate-limited Admin API on each upload. ReportForm::store() deletes the
+        // temporary photo itself once the report is saved.
+        'cleanup' => (bool) env('LIVEWIRE_TEMPORARY_FILE_UPLOAD_CLEANUP', true),
     ],
 
     /*

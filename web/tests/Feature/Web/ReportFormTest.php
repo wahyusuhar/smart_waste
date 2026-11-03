@@ -82,6 +82,8 @@ class ReportFormTest extends TestCase
         $this->assertSame(ReportStatus::Pending, $report->status);
         $this->assertSame(1, $report->statusLogs()->count());
         Storage::disk('public')->assertExists($report->photo_path);
+        // The temporary upload is removed once the photo is stored for good.
+        $this->assertSame([], Storage::disk('tmp-for-tests')->allFiles('livewire-tmp'));
     }
 
     public function test_report_can_be_sent_when_ai_is_unavailable(): void

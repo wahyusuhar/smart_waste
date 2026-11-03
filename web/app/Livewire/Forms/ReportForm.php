@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Form;
 
@@ -63,11 +64,19 @@ class ReportForm extends Form
     {
         $this->validate();
 
-        return $createReport->handle($reporter, $this->photo, [
+        $report = $createReport->handle($reporter, $this->photo, [
             ...$this->reportAttributes(),
             'ai_label' => $aiLabel,
             'ai_confidence' => $aiConfidence,
         ]);
+
+        // The photo is now on the photo disk. When Livewire's cleanup is off (config/livewire.php),
+        // nothing else would remove the temporary copy or the small meta file Livewire keeps next to it.
+        $metaFile = FileUploadConfiguration::path($this->photo->getFilename().'.json', false);
+        $this->photo->delete();
+        FileUploadConfiguration::storage()->delete($metaFile);
+
+        return $report;
     }
 
     // The photo (and therefore the AI result) cannot be replaced after the report is sent.
