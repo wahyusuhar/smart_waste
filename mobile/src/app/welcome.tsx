@@ -1,58 +1,72 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '../components/Button';
+import { FocusAwareStatusBar } from '../components/FocusAwareStatusBar';
 import { colors, fonts } from '../theme';
 
-// Original illustration drawn by docs/welcome_illustration.py.
+// Original illustration drawn by docs/welcome_illustration.py, in colors meant for a teal background.
 const illustration = require('../../assets/welcome.png');
 
 export default function WelcomeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <View style={styles.illustrationArea}>
+    <View style={styles.screen}>
+      <FocusAwareStatusBar style="light" />
+
+      <View style={[styles.hero, { paddingTop: insets.top + 16 }]}>
         <Image source={illustration} style={styles.illustration} contentFit="contain" accessibilityIgnoresInvertColors />
       </View>
 
-      <View style={styles.body}>
+      {/* The white sheet overlaps the teal area a little, so its rounded corners show against it. */}
+      <View style={[styles.sheet, { paddingBottom: insets.bottom + 24 }]}>
         <View>
           <Text style={styles.title}>Laporkan tumpukan sampah di sekitar Anda</Text>
           <Text style={styles.description}>Kirim foto dan lokasi GPS, kategori sampah dideteksi otomatis.</Text>
         </View>
 
         <View style={styles.actions}>
-          <Button title="Masuk" onPress={() => router.push('/login')} />
-          <Button title="Daftar" variant="secondary" onPress={() => router.push('/register')} />
+          <Button title="Mulai" onPress={() => router.push('/how-it-works')} />
+          <Button title="Saya sudah punya akun" variant="secondary" onPress={() => router.push('/login')} />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
+
+const SHEET_RADIUS = 24;
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.accent,
   },
-  illustrationArea: {
-    flex: 1,
+  hero: {
+    flex: 55,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
+    paddingBottom: SHEET_RADIUS,
   },
   illustration: {
     width: '100%',
     // Same ratio as the 800 x 560 source image.
     aspectRatio: 800 / 560,
   },
-  body: {
-    gap: 32,
+  sheet: {
+    flex: 45,
+    justifyContent: 'space-between',
+    gap: 24,
+    marginTop: -SHEET_RADIUS,
     paddingHorizontal: 24,
-    paddingBottom: 24,
+    paddingTop: 28,
+    backgroundColor: colors.white,
+    borderTopLeftRadius: SHEET_RADIUS,
+    borderTopRightRadius: SHEET_RADIUS,
   },
   title: {
     fontFamily: fonts.semibold,

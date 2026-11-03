@@ -1,5 +1,8 @@
-"""Draws the Welcome screen illustration (mobile/assets/welcome.png): a bin with a leaf, a plastic bottle
-and a newspaper around it, flat style, teal and gray, transparent background.
+"""Draws the Welcome illustration (mobile/assets/welcome.png): a bin with leaves, a plastic bottle and a
+newspaper around it, flat style, transparent background.
+
+It is shown on the teal (#0F766E) blocks of the Welcome screen and the Beranda banner, so the shapes use
+white and light teal with dark teal details; teal shapes would disappear into that background.
 
 Needs Pillow, which the training venv already has:
 
@@ -20,9 +23,7 @@ TEAL = "#0F766E"
 TEAL_DARK = "#115E59"
 TEAL_LIGHT = "#CCFBF1"
 WHITE = "#FFFFFF"
-GRAY100 = "#F3F4F6"
 GRAY300 = "#D1D5DC"
-GRAY400 = "#99A1AF"
 GRAY500 = "#6A7282"
 
 
@@ -38,7 +39,7 @@ def paste_rotated(canvas, layer, center, angle):
     canvas.alpha_composite(rotated, (x - rotated.width // 2, y - rotated.height // 2))
 
 
-def leaf(length, width, color):
+def leaf(length, width, color, vein):
     stalk = length * 0.18
     layer = Image.new("RGBA", tuple(s(length + stalk, width)), (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
@@ -50,7 +51,7 @@ def leaf(length, width, color):
     bottom = [(x, 2 * middle - y) for x, y in reversed(top)]
     draw.polygon([tuple(s(x, y)) for x, y in top + bottom], fill=color)
     # Main vein from the stalk to near the tip.
-    draw.line(s(stalk, middle, stalk + length * 0.82, middle), fill=TEAL_LIGHT, width=s(3)[0])
+    draw.line(s(stalk, middle, stalk + length * 0.82, middle), fill=vein, width=s(3)[0])
     return layer
 
 
@@ -58,17 +59,17 @@ def bottle():
     layer = Image.new("RGBA", tuple(s(90, 230)), (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
     outline = s(5)[0]
-    draw.rounded_rectangle(s(31, 0, 59, 22), radius=s(5)[0], fill=TEAL)  # cap
-    draw.rounded_rectangle(s(34, 18, 56, 52), radius=s(4)[0], fill=TEAL_LIGHT, outline=TEAL_DARK, width=outline)  # neck
-    draw.rounded_rectangle(s(10, 46, 80, 226), radius=s(22)[0], fill=TEAL_LIGHT, outline=TEAL_DARK, width=outline)  # body
-    draw.rectangle(s(12, 110, 78, 156), fill=TEAL)  # label band
+    draw.rounded_rectangle(s(31, 0, 59, 22), radius=s(5)[0], fill=TEAL_DARK)  # cap
+    draw.rounded_rectangle(s(34, 18, 56, 52), radius=s(4)[0], fill=WHITE, outline=TEAL_DARK, width=outline)  # neck
+    draw.rounded_rectangle(s(10, 46, 80, 226), radius=s(22)[0], fill=WHITE, outline=TEAL_DARK, width=outline)  # body
+    draw.rectangle(s(12, 110, 78, 156), fill=TEAL_LIGHT)  # label band
     return layer
 
 
 def newspaper():
     layer = Image.new("RGBA", tuple(s(160, 200)), (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
-    draw.rounded_rectangle(s(2, 2, 158, 198), radius=s(6)[0], fill=WHITE, outline=GRAY300, width=s(4)[0])
+    draw.rounded_rectangle(s(2, 2, 158, 198), radius=s(6)[0], fill=WHITE, outline=TEAL_DARK, width=s(4)[0])
     draw.rectangle(s(18, 20, 142, 38), fill=GRAY500)  # masthead
     draw.rectangle(s(18, 54, 76, 104), fill=TEAL_LIGHT)  # photo
     for y in (56, 70, 84, 98):
@@ -82,21 +83,21 @@ def main():
     canvas = Image.new("RGBA", tuple(s(WIDTH, HEIGHT)), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    # Ground shadow.
-    draw.ellipse(s(150, 505, 650, 548), fill=GRAY100)
+    # Ground shadow, a darker teal than the background it sits on.
+    draw.ellipse(s(150, 505, 650, 548), fill=TEAL_DARK)
 
     # Bin: tapered body, three grooves, lid and handle.
-    draw.polygon([tuple(s(292, 250)), tuple(s(508, 250)), tuple(s(486, 520)), tuple(s(314, 520))], fill=TEAL)
+    draw.polygon([tuple(s(292, 250)), tuple(s(508, 250)), tuple(s(486, 520)), tuple(s(314, 520))], fill=TEAL_LIGHT)
     for x in (350, 400, 450):
-        draw.rounded_rectangle(s(x - 7, 290, x + 7, 480), radius=s(7)[0], fill=TEAL_DARK)
-    draw.rounded_rectangle(s(366, 192, 434, 222), radius=s(12)[0], outline=TEAL_DARK, width=s(10)[0])
-    draw.rounded_rectangle(s(272, 212, 528, 252), radius=s(12)[0], fill=TEAL_DARK)
+        draw.rounded_rectangle(s(x - 7, 290, x + 7, 480), radius=s(7)[0], fill=TEAL)
+    draw.rounded_rectangle(s(366, 192, 434, 222), radius=s(12)[0], outline=WHITE, width=s(10)[0])
+    draw.rounded_rectangle(s(272, 212, 528, 252), radius=s(12)[0], fill=WHITE)
 
     paste_rotated(canvas, newspaper(), (205, 430), 10)
     paste_rotated(canvas, bottle(), (608, 418), -14)
-    paste_rotated(canvas, leaf(110, 46, TEAL), (330, 128), 28)
-    paste_rotated(canvas, leaf(84, 36, TEAL_DARK), (478, 92), -32)
-    paste_rotated(canvas, leaf(70, 30, GRAY400), (560, 165), 12)
+    paste_rotated(canvas, leaf(110, 46, WHITE, TEAL), (330, 128), 28)
+    paste_rotated(canvas, leaf(84, 36, TEAL_LIGHT, TEAL), (478, 92), -32)
+    paste_rotated(canvas, leaf(70, 30, TEAL_DARK, TEAL_LIGHT), (560, 165), 12)
 
     canvas.resize((WIDTH, HEIGHT), Image.LANCZOS).save(OUTPUT, optimize=True)
     print(f"{OUTPUT} ({WIDTH} x {HEIGHT})")
