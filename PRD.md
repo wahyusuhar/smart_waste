@@ -290,6 +290,12 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Ikon outline (Ionicons) di header Beranda (tombol profil) dan di langkah-langkah halaman Cara Kerja, selain di tab bar.
 - Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
 
+**Pengecualian yang disetujui (4 November 2026, website)**
+- Halaman pembuka untuk tamu di `/`, sama seperti di aplikasi: blok teal polos dengan ilustrasi `welcome.png`, lalu judul, tiga langkah, tombol Masuk dan Daftar, dan link APK.
+- Ikon outline Lucide (SVG inline lewat komponen `x-icon`, tanpa paket) **hanya** di menu sidebar dan di kartu statistik dashboard. Kotak ikon kartu statistik memakai warna status yang sama dengan badge.
+- Pesan berhasil (buat, ubah, hapus, pendaftaran) tampil sebagai toast. Toast memakai border tipis ditambah bayangan halus karena melayang di atas konten; komponen lain tetap hanya memakai border.
+- Aturan lain tetap berlaku: tanpa gradien, glassmorphism, emoji, teks pemasaran, atau banner promo; satu warna aksen teal.
+
 ## 9. Deliverables
 
 | # | Item | Lokasi |

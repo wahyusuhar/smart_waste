@@ -40,7 +40,8 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 - Manajemen pengguna: tambah, ubah, hapus, cari.
 
 **User (aplikasi Android dan website)**
-- Halaman pembuka dan halaman Cara Kerja di aplikasi, lalu register dan login. Halaman Masuk dan Daftar di website menampilkan link unduh APK.
+- Halaman pembuka (di aplikasi dan website) dan halaman Cara Kerja di aplikasi, lalu register dan login. Halaman pembuka, Masuk, dan Daftar di website menampilkan link unduh APK.
+- Pesan berhasil setelah membuat, mengubah, atau menghapus data, dan setelah mendaftar, tampil sebagai notifikasi singkat (toast).
 - Buat laporan: foto dari kamera atau galeri, deteksi kategori otomatis yang bisa diganti, lokasi GPS, deskripsi, alamat/patokan opsional.
 - Riwayat dan detail laporan miliknya, termasuk status, catatan admin, dan riwayat status.
 - Ubah atau hapus laporan sendiri selama statusnya masih Menunggu (website).
@@ -309,4 +310,5 @@ Perintah artisan pendukung, dijalankan dari folder `web`:
 ## Kredit
 
 - Ilustrasi di halaman Welcome aplikasi mobile (`mobile/assets/welcome.png`) dibuat sendiri untuk proyek ini dengan [`docs/welcome_illustration.py`](docs/welcome_illustration.py) (Pillow), bukan dari sumber luar.
+- Ikon menu sidebar dan kartu statistik website: [Lucide](https://lucide.dev) (lisensi ISC), disalin sebagai SVG inline di `web/resources/views/components/icon.blade.php`.
 - Dataset: "Garbage Classification (12 classes)" oleh Mostafa Mohamed di Kaggle. Rinciannya di [`ml/DATASET.md`](ml/DATASET.md).
