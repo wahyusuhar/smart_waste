@@ -28,7 +28,7 @@
                         @error('form.photo')
                             <p id="form.photo-error" class="mt-1.5 text-sm text-red-700">{{ $message }}</p>
                         @else
-                            <p class="mt-1.5 text-[13px] text-gray-500">JPG atau PNG, maksimal 5 MB.</p>
+                            <p class="mt-1.5 text-[13px] text-gray-500">JPG atau PNG, maksimal 4 MB.</p>
                         @enderror
                     </div>
 

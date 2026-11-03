@@ -17,7 +17,7 @@ class ClassifyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:4096'],
         ];
     }
 }

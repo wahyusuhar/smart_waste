@@ -328,7 +328,7 @@ Semua poin di bawah sudah diputuskan pemilik proyek pada Fase 0 (2 November 2026
 | 4 | User boleh edit/hapus laporan sendiri? | Hanya selama status masih Pending, dicek di Policy. |
 | 5 | Catatan admin wajib saat status Rejected? | Wajib. Untuk status lain catatan opsional. |
 | 6 | Tampilkan peta (Leaflet + OpenStreetMap) di detail laporan web? | Ya, dikerjakan setelah semua fitur wajib selesai. Sebelum itu koordinat ditampilkan sebagai teks. |
-| 7 | Ukuran maksimal foto upload? | 5 MB (divalidasi di server), foto dikompres di mobile sebelum upload. |
+| 7 | Ukuran maksimal foto upload? | 4 MB (divalidasi di server), foto dikompres di mobile sebelum upload. Diturunkan dari 5 MB pada 3 November 2026 karena Vercel membatasi body request 4,5 MB. Servis FastAPI tetap menerima sampai 5 MB. |
 | 8 | Sumber dataset yang dipakai? | Kaggle "Garbage Classification" 12 kelas (Mostafa Mohamed). Dipakai kelas `biological` (dipetakan ke `organic`), `plastic`, dan `paper`. Lisensi diverifikasi dan dicatat di `ml/DATASET.md`. |
 | 9 | Rasio split data? | 70 / 15 / 15 (train / validation / test). |
 | 10 | Laporan punya kolom judul atau cukup deskripsi? | Cukup deskripsi; kolom `title` tidak dipakai. |

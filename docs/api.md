@@ -226,7 +226,7 @@ Body `multipart/form-data`:
 
 | Field | Aturan |
 |---|---|
-| `photo` | wajib, file jpg/jpeg/png, maks. 5 MB |
+| `photo` | wajib, file jpg/jpeg/png, maks. 4 MB |
 | `latitude` | wajib, angka −90 sampai 90 |
 | `longitude` | wajib, angka −180 sampai 180 |
 | `description` | wajib, maks. 1000 karakter |
@@ -360,7 +360,7 @@ Respons `404`:
 
 Meneruskan foto ke servis prediksi FastAPI dan mengembalikan hasilnya. Foto tidak disimpan; foto baru disimpan saat `POST /api/reports`. Hasil ini adalah saran kategori; user tetap boleh memilih kategori lain sebelum mengirim laporan.
 
-Header: `Authorization: Bearer <token>`. Body `multipart/form-data`: `photo` (wajib, jpg/jpeg/png, maks. 5 MB).
+Header: `Authorization: Bearer <token>`. Body `multipart/form-data`: `photo` (wajib, jpg/jpeg/png, maks. 4 MB).
 
 Respons `200`:
 ```json

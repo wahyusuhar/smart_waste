@@ -3,7 +3,7 @@ import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 const MAX_SIDE = 1280;
 const JPEG_QUALITY = 0.7;
 
-// The server accepts at most 5 MB. A phone photo is often larger, and 1280 px is plenty
+// The server accepts at most 4 MB. A phone photo is often larger, and 1280 px is plenty
 // for the report and for the model (which looks at 224×224), so shrink it before upload.
 // The result is always JPEG, also when a PNG was picked from the gallery.
 export async function compressPhoto({ uri, width, height }: { uri: string; width: number; height: number }): Promise<string> {

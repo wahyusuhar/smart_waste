@@ -118,6 +118,17 @@ class ReportFormTest extends TestCase
         $this->assertDatabaseCount('reports', 0);
     }
 
+    public function test_photo_over_4_mb_is_rejected_without_calling_ml_service(): void
+    {
+        Livewire::actingAs(User::factory()->create())
+            ->test(Form::class)
+            ->set('form.photo', UploadedFile::fake()->image('besar.jpg')->size(4097))
+            ->assertHasErrors(['form.photo' => 'max'])
+            ->assertSet('aiLabel', null);
+
+        Http::assertNothingSent();
+    }
+
     public function test_owner_can_edit_pending_report_without_changing_photo(): void
     {
         $user = User::factory()->create();

@@ -33,7 +33,7 @@ class ReportForm extends Form
     public function rules(): array
     {
         return [
-            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:4096'],
             'description' => ['required', 'string', 'max:1000'],
             'category' => ['nullable', Rule::enum(ReportCategory::class)],
             'latitude' => ['required', 'numeric', 'between:-90,90'],

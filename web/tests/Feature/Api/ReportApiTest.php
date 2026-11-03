@@ -76,7 +76,7 @@ class ReportApiTest extends TestCase
         return [
             'tanpa foto' => [fn () => ['photo' => null], 'photo'],
             'file pdf' => [fn () => ['photo' => UploadedFile::fake()->create('laporan.pdf', 100, 'application/pdf')], 'photo'],
-            'foto lebih dari 5 MB' => [fn () => ['photo' => UploadedFile::fake()->image('besar.jpg')->size(5121)], 'photo'],
+            'foto lebih dari 4 MB' => [fn () => ['photo' => UploadedFile::fake()->image('besar.jpg')->size(4097)], 'photo'],
             'latitude di luar rentang' => [fn () => ['latitude' => 91], 'latitude'],
             'longitude di luar rentang' => [fn () => ['longitude' => 181], 'longitude'],
             'confidence lebih dari 1' => [fn () => ['ai_confidence' => 1.5], 'ai_confidence'],

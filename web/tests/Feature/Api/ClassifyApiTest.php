@@ -102,6 +102,17 @@ class ClassifyApiTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_photo_over_4_mb_is_rejected_before_calling_ml_service(): void
+    {
+        Http::fake();
+
+        $this->classify(UploadedFile::fake()->image('besar.jpg')->size(4097))
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.photo.0', 'Foto tidak boleh lebih dari 4096 kilobyte.');
+
+        Http::assertNothingSent();
+    }
+
     public function test_requires_token(): void
     {
         Http::fake();

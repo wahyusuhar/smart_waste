@@ -19,7 +19,7 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:4096'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'description' => ['required', 'string', 'max:1000'],
