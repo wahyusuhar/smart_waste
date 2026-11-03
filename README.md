@@ -26,6 +26,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 8. [Deploy](#deploy)
 9. [Testing](#testing)
 10. [Dokumentasi](#dokumentasi)
+11. [Kredit](#kredit)
 
 ## Fitur
 
@@ -256,3 +257,8 @@ Hal yang perlu diketahui saat mencoba demo:
 ```
 ml\.venv\Scripts\python docs\erd.py
 ```
+
+## Kredit
+
+- Ilustrasi di halaman Welcome aplikasi mobile (`mobile/assets/welcome.png`) berasal dari [unDraw](https://undraw.co), dipakai sesuai lisensi unDraw yang membolehkan penggunaan gratis.
+- Dataset: "Garbage Classification (12 classes)" oleh Mostafa Mohamed di Kaggle. Rinciannya di [`ml/DATASET.md`](ml/DATASET.md).
