@@ -292,6 +292,14 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Ikon outline (Ionicons) di header Beranda (tombol profil) dan di langkah-langkah halaman Cara Kerja, selain di tab bar.
 - Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
 
+**Pembaruan (4 November 2026, aplikasi mobile)**: bahasa desain diselaraskan dengan website, tata letaknya tetap aplikasi.
+- Halaman Cara Kerja dihapus; tiga langkahnya (nomor dalam lingkaran teal muda) pindah ke Welcome, bersama tombol "Masuk ke Akun" dan "Daftar Akun Baru".
+- Masuk dan Daftar: blok teal dengan logo dan ilustrasi, kartu form putih, ikon di field, tombol tampilkan/sembunyikan password, label "Warga & Admin". Tanpa login Google dan tanpa "Lupa sandi".
+- Beranda: logo di samping sapaan; kartu status 2 × 2 (ikon dalam kotak teal muda, angka extrabold, label kapital teal); kartu "Laporan terbaru" berisi foto, badge kategori dan status di atas foto, alamat, judul "Sampah {kategori} di {tempat}", deskripsi pengguna, dan "ID #SW-0021". Data tetap hanya laporan milik pengguna.
+- Riwayat dan Detail memakai judul, badge berikon (bentuk pill), dan nomor laporan yang sama. Kartu bersudut 16 px.
+- Ikon Ionicons di tab bar, tombol, badge, kartu, dan field Masuk/Daftar.
+- Logo dan ikon aplikasi dari `mobile/assets/icon_screen.png` (ikon tong sampah yang sama dengan logo web), berlatar putih. Gradien bawaan logo dipertahankan sesuai pilihan pemilik proyek.
+
 **Pengecualian yang disetujui (4 November 2026, website)**
 - Halaman pembuka untuk tamu di `/`: header lengket dengan menu jangkar (Beranda, Cara Kerja, Laporan, Jenis Sampah), foto laporan Selesai terbaru sebagai foto utama (ilustrasi `welcome.png` jika belum ada), judul, tiga langkah, tombol Masuk dan Daftar, kartu jumlah laporan (angka nyata), laporan Selesai terbaru (lihat pengecualian PRD §5), foto jenis sampah, satu blok teal polos berisi ajakan, footer empat kolom, dan link APK. Kartu memakai sudut 16 px dan bayangan halus. Tanpa foto stok, angka karangan, klaim instansi pemerintah, atau label versi.
 - Satu-satunya gradien: bayangan gelap tipis di bagian bawah foto utama halaman pembuka, hanya agar teks putih di atas foto tetap terbaca.
