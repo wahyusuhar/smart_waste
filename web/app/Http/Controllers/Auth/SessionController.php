@@ -31,6 +31,7 @@ class SessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        // Back to the public opening page, not the login form.
+        return redirect('/');
     }
 }
