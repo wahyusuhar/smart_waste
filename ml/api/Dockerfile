@@ -15,5 +15,6 @@ RUN pip install --no-cache-dir -r api/requirements.txt
 COPY api/main.py api/main.py
 COPY models/waste_classifier.tflite models/labels.json models/
 
-# Render sets $PORT; exec lets uvicorn receive the stop signal directly.
-CMD ["sh", "-c", "exec uvicorn main:app --app-dir api --host 0.0.0.0 --port ${PORT}"]
+# The host sets $PORT; exec lets uvicorn receive the stop signal directly. "::" listens on IPv6 and IPv4,
+# which Railway's private network needs (older Railway environments are IPv6-only).
+CMD ["sh", "-c", "exec uvicorn main:app --app-dir api --host :: --port ${PORT}"]

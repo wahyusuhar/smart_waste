@@ -4,6 +4,13 @@
 set -e
 cd /var/www/html
 
+# Railway has no secret files: the Aiven CA certificate arrives base64-encoded in an env var. It must be
+# written before any artisan command, because config:cache below freezes MYSQL_ATTR_SSL_CA.
+if [ -n "$MYSQL_CA_CERT_BASE64" ]; then
+    echo "$MYSQL_CA_CERT_BASE64" | base64 -d > /tmp/aiven-ca.pem
+    export MYSQL_ATTR_SSL_CA=/tmp/aiven-ca.pem
+fi
+
 php artisan migrate --force
 
 # Seed only an empty database. Render restarts the container after every sleep, and the seeder
