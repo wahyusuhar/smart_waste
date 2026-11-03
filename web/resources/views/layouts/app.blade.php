@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ isset($title) ? $title.' · ' : '' }}Smart Waste</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
@@ -33,7 +34,7 @@
         aria-label="Navigasi"
     >
         <div class="flex h-14 items-center gap-2.5 px-5">
-            <span class="flex size-7 items-center justify-center rounded-md bg-accent text-[11px] font-semibold text-white">SW</span>
+            <img src="{{ asset('images/logo-mark.png') }}" alt="" class="size-8">
             <a href="{{ url('/') }}" class="text-sm font-semibold text-gray-900">Smart Waste</a>
         </div>
 

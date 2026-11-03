@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title') · Smart Waste</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
@@ -11,7 +12,10 @@
     <div class="min-h-screen lg:grid lg:grid-cols-2">
         <aside class="rounded-b-[2rem] bg-accent px-6 pt-6 pb-16 lg:flex lg:flex-col lg:rounded-none lg:px-12 lg:py-10">
             <a href="{{ url('/') }}" class="inline-flex items-center gap-2.5">
-                <span class="flex size-8 items-center justify-center rounded-md bg-white/15 text-xs font-semibold text-white">SW</span>
+                {{-- White tile because the logo's dark blue would disappear on the teal block. --}}
+                <span class="flex size-9 items-center justify-center rounded-lg bg-white p-1">
+                    <img src="{{ asset('images/logo-mark.png') }}" alt="" class="size-full">
+                </span>
                 <span class="text-sm font-semibold text-white">Smart Waste</span>
             </a>
 

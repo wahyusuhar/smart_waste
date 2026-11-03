@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Smart Waste</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-white font-sans text-slate-600 antialiased" x-data="landingNav()">
@@ -34,9 +35,7 @@
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <a href="#beranda" class="flex items-center gap-3" @click="go('beranda')">
-            <span class="flex size-10 items-center justify-center rounded-xl bg-accent text-white">
-                <x-icon name="leaf" class="size-5" />
-            </span>
+            <img src="{{ asset('images/logo-mark.png') }}" alt="" class="size-10">
             <span class="leading-tight">
                 <span class="block text-base font-bold text-slate-900">Smart Waste</span>
                 <span class="block text-[11px] font-semibold tracking-wide text-accent uppercase">Pelaporan Sampah</span>
@@ -80,7 +79,7 @@
         <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:min-h-[calc(100svh-4rem)] lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:py-8">
             <div>
                 <p class="flex items-center gap-2 text-xs font-semibold tracking-widest text-accent uppercase">
-                    <span class="flex size-6 items-center justify-center rounded-md bg-accent text-[10px] font-bold tracking-normal text-white">SW</span>
+                    <img src="{{ asset('images/logo-mark.png') }}" alt="" class="size-6">
                     Smart Waste
                 </p>
                 <h1 class="mt-3 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl xl:text-5xl">Laporkan tumpukan sampah di sekitar Anda</h1>
@@ -274,9 +273,7 @@
     <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:px-8 lg:grid-cols-4">
         <div>
             <p class="flex items-center gap-2.5">
-                <span class="flex size-8 items-center justify-center rounded-lg bg-accent text-white">
-                    <x-icon name="leaf" />
-                </span>
+                <img src="{{ asset('images/logo-mark.png') }}" alt="" class="size-8">
                 <span class="font-bold text-slate-900">Smart Waste</span>
             </p>
             <p class="mt-3 text-sm">Sistem pelaporan tumpukan sampah dengan deteksi kategori otomatis.</p>
