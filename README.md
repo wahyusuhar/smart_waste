@@ -25,6 +25,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 7. [Keterbatasan model](#keterbatasan-model)
 8. [Deploy](#deploy)
 9. [Testing](#testing)
+10. [Dokumentasi](#dokumentasi)
 
 ## Fitur
 
@@ -240,3 +241,19 @@ Hal yang perlu diketahui saat mencoba demo:
 | Gaya kode PHP | `cd web` lalu `php vendor\bin\pint --test` | Laravel Pint, tanpa mengubah file |
 | FastAPI | `ml\api\.venv\Scripts\python -m pytest ml\api` | `/health`, `/predict`, validasi file, token |
 | Mobile | `cd mobile` lalu `npx tsc --noEmit`, `npx expo lint`, `npx jest` | Typecheck, lint, dan unit test klien API |
+
+## Dokumentasi
+
+| File | Isi |
+|---|---|
+| [`docs/api.md`](docs/api.md) | Semua endpoint REST API: method, URL, header, body, contoh respons sukses dan error |
+| [`docs/erd.png`](docs/erd.png) | Diagram relasi tabel |
+| [`docs/erd.py`](docs/erd.py) | Skrip pembuat `erd.png` |
+| [`docs/schema.sql`](docs/schema.sql) | Struktur database (tanpa data) |
+| [`ml/DATASET.md`](ml/DATASET.md) | Sumber, lisensi, dan pembagian dataset |
+
+`erd.png` digambar dengan matplotlib dari daftar tabel di `docs/erd.py`. Daftar itu disalin dari `web/database/migrations`, jadi perlu diperbarui jika migrasi berubah. Untuk membuat ulang gambarnya, jalankan dari root repository dengan venv training, yang sudah berisi matplotlib:
+
+```
+ml\.venv\Scripts\python docs\erd.py
+```
