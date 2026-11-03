@@ -50,14 +50,14 @@ function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
           headerShadowVisible: false,
         }}
       >
-        {/* When the guard turns false (logout or a 401), the router moves to the screens that are still allowed. */}
-        <Stack.Protected guard={signedIn}>
+        {/* Signed out (app start, logout or a 401): go to Welcome. Without redirectTo the router picks the first
+            allowed route in its own sorted order, which is Login, not the order of the screens below. */}
+        <Stack.Protected guard={signedIn} redirectTo="/welcome">
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="reports/new" options={{ headerShown: true, title: 'Buat Laporan' }} />
           <Stack.Screen name="reports/[id]" options={{ headerShown: true, title: 'Detail Laporan' }} />
         </Stack.Protected>
 
-        {/* Welcome is listed first, so it is where a signed-out user lands (also after logout or a 401). */}
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="welcome" />
           <Stack.Screen name="how-it-works" options={{ headerShown: true, title: 'Cara Kerja' }} />
