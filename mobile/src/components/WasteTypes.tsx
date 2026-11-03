@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray100,
   },
   label: {
-    fontFamily: fonts.medium,
+    fontFamily: fonts.semibold,
     fontSize: 14,
     lineHeight: 20,
     color: colors.gray900,

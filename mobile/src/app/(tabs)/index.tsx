@@ -17,8 +17,13 @@ import { colors, fonts, type } from '../../theme';
 import { firstName } from '../../utils/format';
 
 const illustration = require('../../../assets/welcome.png');
+const logo = require('../../../assets/icon_screen.png');
 
-const STATUSES: ReportStatus[] = ['pending', 'in_progress', 'completed', 'rejected'];
+// Two rows of two cards.
+const STATUS_ROWS: ReportStatus[][] = [
+  ['pending', 'in_progress'],
+  ['completed', 'rejected'],
+];
 const LATEST_COUNT = 5;
 
 export default function DashboardScreen() {
@@ -71,6 +76,7 @@ export default function DashboardScreen() {
     >
       {/* The header uses only the signed-in user, so it shows even while the data loads or fails. */}
       <View style={styles.header}>
+        <Image source={logo} style={styles.logo} contentFit="contain" accessibilityLabel="Smart Waste" />
         <View style={styles.headerText}>
           <Text style={type.title}>Halo, {user ? firstName(user.name) : ''}</Text>
           <Text style={type.caption}>Ringkasan laporan Anda</Text>
@@ -112,11 +118,15 @@ export default function DashboardScreen() {
             <SectionHeader title="Status laporan">
               <Text style={type.caption}>{summary.total.toLocaleString('id-ID')} total</Text>
             </SectionHeader>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.strip} contentContainerStyle={styles.stripContent}>
-              {STATUSES.map((status) => (
-                <StatCard key={status} status={status} value={summary[status]} />
+            <View style={styles.grid}>
+              {STATUS_ROWS.map((row) => (
+                <View key={row.join()} style={styles.gridRow}>
+                  {row.map((status) => (
+                    <StatCard key={status} status={status} value={summary[status]} />
+                  ))}
+                </View>
               ))}
-            </ScrollView>
+            </View>
           </View>
         </>
       )}
@@ -173,8 +183,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
   },
+  logo: {
+    width: 40,
+    height: 40,
+  },
   headerText: {
     flex: 1,
+  },
+  grid: {
+    marginTop: 12,
+    gap: 12,
+  },
+  gridRow: {
+    flexDirection: 'row',
+    gap: 12,
   },
   pressed: {
     opacity: 0.6,
@@ -192,7 +214,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   bannerTitle: {
-    fontFamily: fonts.semibold,
+    fontFamily: fonts.extrabold,
     fontSize: 18,
     lineHeight: 24,
     color: colors.white,
@@ -233,10 +255,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderWidth: 1,
     borderColor: colors.gray200,
-    borderRadius: 12,
+    borderRadius: 16,
   },
   link: {
-    fontFamily: fonts.medium,
+    fontFamily: fonts.semibold,
     fontSize: 14,
     color: colors.accent,
   },

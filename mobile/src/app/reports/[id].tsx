@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
@@ -8,8 +9,8 @@ import type { Report } from '../../api/types';
 import { CategoryBadge, StatusBadge } from '../../components/Badges';
 import { Card } from '../../components/Card';
 import { ErrorState, FormError, LoadingState } from '../../components/States';
-import { categoryLabels, colors, type } from '../../theme';
-import { formatCoordinate, formatDateTime, formatPercent } from '../../utils/format';
+import { categoryLabels, colors, fonts, type } from '../../theme';
+import { formatCoordinate, formatDateTime, formatPercent, reportCode, reportTitle } from '../../utils/format';
 
 export default function ReportDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -70,9 +71,19 @@ export default function ReportDetailScreen() {
       contentContainerStyle={styles.content}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} colors={[colors.accent]} tintColor={colors.accent} />}
     >
-      <View>
-        <Text style={type.title}>Laporan #{report.id}</Text>
-        <Text style={[type.caption, styles.subtitle]}>Dikirim {formatDateTime(report.created_at)}</Text>
+      <View style={styles.header}>
+        <Text style={type.title}>{reportTitle(report)}</Text>
+        <View style={styles.place}>
+          <Ionicons name="location-outline" size={14} color={colors.accent} />
+          <Text style={[type.caption, styles.placeText]}>{report.address ?? 'Alamat/patokan tidak diisi'}</Text>
+        </View>
+        <Text style={type.caption}>
+          <Text style={styles.code}>ID #{reportCode(report.id)}</Text> · Dikirim {formatDateTime(report.created_at)}
+        </Text>
+        <View style={styles.badges}>
+          <CategoryBadge category={report.category} />
+          <StatusBadge status={report.status} />
+        </View>
       </View>
 
       {error ? <FormError message={error} /> : null}
@@ -88,7 +99,7 @@ export default function ReportDetailScreen() {
             style={styles.photo}
             contentFit="contain"
             transition={150}
-            accessibilityLabel={`Foto laporan #${report.id}`}
+            accessibilityLabel={`Foto laporan #${reportCode(report.id)}`}
             onError={() => setPhotoFailed(true)}
           />
         )}
@@ -180,7 +191,25 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 16,
   },
-  subtitle: {
+  header: {
+    gap: 6,
+  },
+  place: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  placeText: {
+    flex: 1,
+  },
+  code: {
+    fontFamily: fonts.bold,
+    color: colors.accent,
+  },
+  badges: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
     marginTop: 2,
   },
   photo: {
