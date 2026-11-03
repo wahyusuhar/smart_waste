@@ -280,6 +280,12 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Kartu dengan border kiri berwarna tebal, sudut terlalu bulat di semua elemen, animasi yang tidak perlu.
 - Lorem ipsum dan data palsu yang tidak masuk akal.
 
+**Pengecualian yang disetujui (3 November 2026, aplikasi mobile)**
+- Satu ilustrasi di halaman Welcome (`mobile/assets/welcome.png`, dari unDraw, sumbernya dicatat di README).
+- Blok teal polos dengan satu lengkungan sederhana di halaman Welcome, dan blok teal polos di header Beranda.
+- Ikon outline (Ionicons) di header Beranda (tombol profil) dan di grid "Jenis sampah yang dikenali", selain di tab bar.
+- Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
+
 ## 9. Deliverables
 
 | # | Item | Lokasi |
