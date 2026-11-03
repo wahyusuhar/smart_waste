@@ -10,6 +10,8 @@ import { colors, fonts } from '../theme';
 // Original illustration drawn by docs/welcome_illustration.py, in colors meant for a teal background.
 const illustration = require('../../assets/welcome.png');
 
+const STEPS = ['Foto tumpukan sampah', 'Tandai lokasinya', 'Pantau statusnya'];
+
 export default function WelcomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -29,9 +31,20 @@ export default function WelcomeScreen() {
           <Text style={styles.description}>Kirim foto dan lokasi GPS, kategori sampah dideteksi otomatis.</Text>
         </View>
 
+        <View style={styles.steps}>
+          {STEPS.map((step, index) => (
+            <View key={step} style={styles.step}>
+              <View style={styles.stepNumber}>
+                <Text style={styles.stepNumberText}>{index + 1}</Text>
+              </View>
+              <Text style={styles.stepText}>{step}</Text>
+            </View>
+          ))}
+        </View>
+
         <View style={styles.actions}>
-          <Button title="Mulai" onPress={() => router.push('/how-it-works')} />
-          <Button title="Saya sudah punya akun" variant="secondary" onPress={() => router.push('/login')} />
+          <Button title="Masuk ke Akun" icon="log-in-outline" onPress={() => router.push('/login')} />
+          <Button title="Daftar Akun Baru" icon="person-add-outline" variant="soft" onPress={() => router.push('/register')} />
         </View>
       </View>
     </View>
@@ -45,22 +58,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.accent,
   },
+  // Takes whatever height the sheet leaves, so everything fits on one screen.
   hero: {
-    flex: 55,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingBottom: SHEET_RADIUS,
+    paddingBottom: SHEET_RADIUS + 8,
   },
   illustration: {
+    flex: 1,
     width: '100%',
-    // Same ratio as the 800 x 560 source image.
-    aspectRatio: 800 / 560,
+    maxHeight: 260,
   },
   sheet: {
-    flex: 45,
-    justifyContent: 'space-between',
-    gap: 24,
+    gap: 20,
     marginTop: -SHEET_RADIUS,
     paddingHorizontal: 24,
     paddingTop: 28,
@@ -69,9 +81,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SHEET_RADIUS,
   },
   title: {
-    fontFamily: fonts.semibold,
-    fontSize: 24,
+    fontFamily: fonts.extrabold,
+    fontSize: 26,
     lineHeight: 32,
+    letterSpacing: -0.5,
     color: colors.gray900,
   },
   description: {
@@ -80,6 +93,32 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     color: colors.gray600,
+  },
+  steps: {
+    gap: 10,
+  },
+  step: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  stepNumber: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accentSoft,
+  },
+  stepNumberText: {
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.accent,
+  },
+  stepText: {
+    fontFamily: fonts.semibold,
+    fontSize: 15,
+    color: colors.gray900,
   },
   actions: {
     gap: 12,

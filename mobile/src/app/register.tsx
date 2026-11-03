@@ -1,15 +1,14 @@
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 import { ApiError, SERVER_ERROR_MESSAGE } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
+import { AuthLayout } from '../components/AuthLayout';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { FormError } from '../components/States';
 import { TextField, type TextFieldRef } from '../components/TextField';
-import { colors, fonts, type } from '../theme';
+import { type } from '../theme';
 import { firstName } from '../utils/format';
 
 export default function RegisterScreen() {
@@ -56,145 +55,107 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          <Text style={styles.appName}>Smart Waste</Text>
+    <AuthLayout>
+      <View>
+        <Text style={type.title}>Daftar Akun Baru</Text>
+        <Text style={[type.caption, styles.subtitle]}>Buat akun untuk mengirim dan memantau laporan sampah.</Text>
+      </View>
 
-          <Card>
-            <View style={styles.form}>
-              <View>
-                <Text style={type.title}>Daftar</Text>
-                <Text style={[type.caption, styles.subtitle]}>Buat akun untuk mengirim dan memantau laporan sampah.</Text>
-              </View>
+      {formError ? <FormError message={formError} /> : null}
 
-              {formError ? <FormError message={formError} /> : null}
+      <TextField
+        label="Nama"
+        icon="person-outline"
+        value={name}
+        onChangeText={setName}
+        error={fieldErrors.name}
+        autoCapitalize="words"
+        autoComplete="name"
+        textContentType="name"
+        returnKeyType="next"
+        onSubmitEditing={() => emailRef.current?.focus()}
+        editable={!submitting}
+      />
+      <TextField
+        ref={emailRef}
+        label="Email"
+        icon="mail-outline"
+        value={email}
+        onChangeText={setEmail}
+        error={fieldErrors.email}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
+        onSubmitEditing={() => phoneRef.current?.focus()}
+        editable={!submitting}
+      />
+      <TextField
+        ref={phoneRef}
+        label="Nomor HP (opsional)"
+        icon="call-outline"
+        value={phone}
+        onChangeText={setPhone}
+        error={fieldErrors.phone}
+        keyboardType="phone-pad"
+        autoComplete="tel"
+        textContentType="telephoneNumber"
+        maxLength={20}
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+        editable={!submitting}
+      />
+      <TextField
+        ref={passwordRef}
+        label="Password"
+        icon="lock-closed-outline"
+        value={password}
+        onChangeText={setPassword}
+        error={fieldErrors.password}
+        hint="Minimal 8 karakter."
+        secureTextEntry
+        autoComplete="new-password"
+        textContentType="newPassword"
+        returnKeyType="next"
+        onSubmitEditing={() => confirmationRef.current?.focus()}
+        editable={!submitting}
+      />
+      <TextField
+        ref={confirmationRef}
+        label="Konfirmasi password"
+        icon="lock-closed-outline"
+        value={passwordConfirmation}
+        onChangeText={setPasswordConfirmation}
+        error={fieldErrors.password_confirmation}
+        secureTextEntry
+        autoComplete="new-password"
+        textContentType="newPassword"
+        returnKeyType="go"
+        onSubmitEditing={submit}
+        editable={!submitting}
+      />
 
-              <TextField
-                label="Nama"
-                value={name}
-                onChangeText={setName}
-                error={fieldErrors.name}
-                autoCapitalize="words"
-                autoComplete="name"
-                textContentType="name"
-                returnKeyType="next"
-                onSubmitEditing={() => emailRef.current?.focus()}
-                editable={!submitting}
-              />
-              <TextField
-                ref={emailRef}
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                error={fieldErrors.email}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                textContentType="emailAddress"
-                returnKeyType="next"
-                onSubmitEditing={() => phoneRef.current?.focus()}
-                editable={!submitting}
-              />
-              <TextField
-                ref={phoneRef}
-                label="Nomor HP (opsional)"
-                value={phone}
-                onChangeText={setPhone}
-                error={fieldErrors.phone}
-                keyboardType="phone-pad"
-                autoComplete="tel"
-                textContentType="telephoneNumber"
-                maxLength={20}
-                returnKeyType="next"
-                onSubmitEditing={() => passwordRef.current?.focus()}
-                editable={!submitting}
-              />
-              <TextField
-                ref={passwordRef}
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                error={fieldErrors.password}
-                hint="Minimal 8 karakter."
-                secureTextEntry
-                autoComplete="new-password"
-                textContentType="newPassword"
-                returnKeyType="next"
-                onSubmitEditing={() => confirmationRef.current?.focus()}
-                editable={!submitting}
-              />
-              <TextField
-                ref={confirmationRef}
-                label="Konfirmasi password"
-                value={passwordConfirmation}
-                onChangeText={setPasswordConfirmation}
-                error={fieldErrors.password_confirmation}
-                secureTextEntry
-                autoComplete="new-password"
-                textContentType="newPassword"
-                returnKeyType="go"
-                onSubmitEditing={submit}
-                editable={!submitting}
-              />
-
-              <Button title="Daftar" loadingTitle="Memproses…" loading={submitting} onPress={submit} />
-            </View>
-          </Card>
-
-          <View style={styles.switchRow}>
-            <Text style={styles.switchText}>Sudah punya akun?</Text>
-            <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.dismissTo('/login')} disabled={submitting}>
-              <Text style={styles.switchLink}>Masuk</Text>
-            </Pressable>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      <View style={styles.actions}>
+        <Button title="Daftar" icon="person-add-outline" loadingTitle="Memproses…" loading={submitting} onPress={submit} />
+        <Button
+          title="Sudah punya akun? Masuk"
+          icon="log-in-outline"
+          variant="soft"
+          disabled={submitting}
+          onPress={() => router.dismissTo('/login')}
+        />
+      </View>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.gray50,
-  },
-  flex: {
-    flex: 1,
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  appName: {
-    marginBottom: 24,
-    textAlign: 'center',
-    fontFamily: fonts.semibold,
-    fontSize: 14,
-    color: colors.gray900,
-  },
-  form: {
-    padding: 24,
-    gap: 16,
-  },
   subtitle: {
     marginTop: 4,
   },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 4,
-    marginTop: 16,
-  },
-  switchText: {
-    fontFamily: fonts.regular,
-    fontSize: 14,
-    color: colors.gray600,
-  },
-  switchLink: {
-    fontFamily: fonts.medium,
-    fontSize: 14,
-    color: colors.accent,
+  actions: {
+    gap: 12,
+    marginTop: 4,
   },
 });
