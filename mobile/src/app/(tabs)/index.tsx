@@ -1,6 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image } from 'expo-image';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { Fragment, useCallback, useState } from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,14 +9,14 @@ import { ApiError, SERVER_ERROR_MESSAGE, getDashboard, getReports } from '../../
 import type { DashboardSummary, Report, ReportStatus } from '../../api/types';
 import { useAuth } from '../../auth/AuthContext';
 import { Button } from '../../components/Button';
-import { Card } from '../../components/Card';
-import { FocusAwareStatusBar } from '../../components/FocusAwareStatusBar';
-import { ReportListItem } from '../../components/ReportListItem';
+import { ReportCard } from '../../components/ReportCard';
 import { StatCard } from '../../components/StatCard';
 import { EmptyState, ErrorState, FormError, LoadingState } from '../../components/States';
 import { WasteTypes } from '../../components/WasteTypes';
 import { colors, fonts, type } from '../../theme';
 import { firstName } from '../../utils/format';
+
+const illustration = require('../../../assets/welcome.png');
 
 const STATUSES: ReportStatus[] = ['pending', 'in_progress', 'completed', 'rejected'];
 const LATEST_COUNT = 5;
@@ -64,16 +65,15 @@ export default function DashboardScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.scroll}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} colors={[colors.accent]} tintColor={colors.white} />}
+      style={styles.screen}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + 12 }]}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} colors={[colors.accent]} tintColor={colors.accent} />}
     >
-      <FocusAwareStatusBar style="light" />
-
       {/* The header uses only the signed-in user, so it shows even while the data loads or fails. */}
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+      <View style={styles.header}>
         <View style={styles.headerText}>
-          <Text style={styles.greeting}>Halo, {user ? firstName(user.name) : ''}</Text>
-          <Text style={styles.headerSubtitle}>Ringkasan laporan Anda</Text>
+          <Text style={type.title}>Halo, {user ? firstName(user.name) : ''}</Text>
+          <Text style={type.caption}>Ringkasan laporan Anda</Text>
         </View>
         <Pressable
           accessibilityRole="button"
@@ -82,114 +82,135 @@ export default function DashboardScreen() {
           onPress={() => router.navigate('/profile')}
           style={({ pressed }) => pressed && styles.pressed}
         >
-          <Ionicons name="person-circle-outline" size={32} color={colors.white} />
+          <Ionicons name="person-circle-outline" size={34} color={colors.gray700} />
         </Pressable>
       </View>
 
-      <View style={styles.body}>
-        <Card>
-          <View style={styles.callToAction}>
-            <Text style={type.heading}>Ada tumpukan sampah?</Text>
-            <Button title="Buat Laporan" onPress={() => router.push('/reports/new')} />
-          </View>
-        </Card>
-
-        {loading && !summary ? (
-          <View style={styles.stateBox}>
-            <LoadingState />
-          </View>
-        ) : !summary ? (
-          <View style={styles.stateBox}>
-            <ErrorState message={error ?? SERVER_ERROR_MESSAGE} onRetry={retry} />
-          </View>
-        ) : (
-          <>
-            {/* Data is still shown when a refresh fails; the error appears above it. */}
-            {error ? <FormError message={error} /> : null}
-
-            <View>
-              <View style={styles.sectionHeader}>
-                <Text style={type.heading}>Status laporan</Text>
-                <Text style={type.caption}>{summary.total.toLocaleString('id-ID')} total</Text>
-              </View>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.statusStrip}
-                contentContainerStyle={styles.statusStripContent}
-              >
-                {STATUSES.map((status) => (
-                  <StatCard key={status} status={status} value={summary[status]} />
-                ))}
-              </ScrollView>
-            </View>
-          </>
-        )}
-
-        <WasteTypes />
-
-        {summary ? (
-          <Card title="Laporan terbaru">
-            {latest.length === 0 ? (
-              <EmptyState message="Anda belum pernah membuat laporan." />
-            ) : (
-              <>
-                {latest.map((report, index) => (
-                  <Fragment key={report.id}>
-                    {index > 0 ? <View style={styles.separator} /> : null}
-                    <ReportListItem report={report} onPress={() => router.push(`/reports/${report.id}`)} />
-                  </Fragment>
-                ))}
-                <Pressable accessibilityRole="link" onPress={() => router.navigate('/reports')} style={styles.footerLink}>
-                  <Text style={styles.footerLinkText}>Lihat semua riwayat</Text>
-                </Pressable>
-              </>
-            )}
-          </Card>
-        ) : null}
+      <View style={styles.banner}>
+        <View style={styles.bannerText}>
+          <Text style={styles.bannerTitle}>Ada tumpukan sampah?</Text>
+          <Text style={styles.bannerBody}>Foto, kirim lokasinya, dan pantau penanganannya.</Text>
+          <Button title="Buat Laporan" variant="inverse" style={styles.bannerButton} onPress={() => router.push('/reports/new')} />
+        </View>
+        <Image source={illustration} style={styles.bannerIllustration} contentFit="contain" accessibilityIgnoresInvertColors />
       </View>
+
+      {loading && !summary ? (
+        <View style={styles.stateBox}>
+          <LoadingState />
+        </View>
+      ) : !summary ? (
+        <View style={styles.stateBox}>
+          <ErrorState message={error ?? SERVER_ERROR_MESSAGE} onRetry={retry} />
+        </View>
+      ) : (
+        <>
+          {/* Data is still shown when a refresh fails; the error appears above it. */}
+          {error ? <FormError message={error} /> : null}
+
+          <View>
+            <SectionHeader title="Status laporan">
+              <Text style={type.caption}>{summary.total.toLocaleString('id-ID')} total</Text>
+            </SectionHeader>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.strip} contentContainerStyle={styles.stripContent}>
+              {STATUSES.map((status) => (
+                <StatCard key={status} status={status} value={summary[status]} />
+              ))}
+            </ScrollView>
+          </View>
+        </>
+      )}
+
+      <WasteTypes />
+
+      {summary ? (
+        <View>
+          <SectionHeader title="Laporan terbaru">
+            {latest.length > 0 ? (
+              <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.navigate('/reports')}>
+                <Text style={styles.link}>Lihat semua</Text>
+              </Pressable>
+            ) : null}
+          </SectionHeader>
+          {latest.length === 0 ? (
+            <View style={styles.emptyBox}>
+              <EmptyState message="Anda belum pernah membuat laporan." />
+            </View>
+          ) : (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.strip} contentContainerStyle={styles.stripContent}>
+              {latest.map((report) => (
+                <ReportCard key={report.id} report={report} onPress={() => router.push(`/reports/${report.id}`)} />
+              ))}
+            </ScrollView>
+          )}
+        </View>
+      ) : null}
     </ScrollView>
   );
 }
 
+function SectionHeader({ title, children }: { title: string; children?: ReactNode }) {
+  return (
+    <View style={styles.sectionHeader}>
+      <Text style={type.heading}>{title}</Text>
+      {children}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  scroll: {
-    paddingBottom: 16,
+  screen: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  content: {
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    gap: 24,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    paddingHorizontal: 16,
-    paddingBottom: 24,
-    backgroundColor: colors.accent,
   },
   headerText: {
     flex: 1,
   },
-  greeting: {
+  pressed: {
+    opacity: 0.6,
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    padding: 20,
+    borderRadius: 16,
+    backgroundColor: colors.accent,
+  },
+  bannerText: {
+    flex: 1,
+    gap: 6,
+  },
+  bannerTitle: {
     fontFamily: fonts.semibold,
-    fontSize: 22,
-    lineHeight: 30,
+    fontSize: 18,
+    lineHeight: 24,
     color: colors.white,
   },
-  headerSubtitle: {
-    marginTop: 2,
+  bannerBody: {
     fontFamily: fonts.regular,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+    lineHeight: 18,
     color: colors.accentTint,
   },
-  pressed: {
-    opacity: 0.7,
+  bannerButton: {
+    alignSelf: 'flex-start',
+    marginTop: 8,
   },
-  body: {
-    padding: 16,
-    gap: 20,
-  },
-  callToAction: {
-    padding: 16,
-    gap: 12,
+  bannerIllustration: {
+    width: 112,
+    // Same ratio as the 800 x 560 source image.
+    aspectRatio: 800 / 560,
   },
   stateBox: {
     minHeight: 160,
@@ -200,25 +221,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   // Bleeds to the screen edges so cards scroll out of view instead of being cut at the page padding.
-  statusStrip: {
+  strip: {
     marginTop: 12,
     marginHorizontal: -16,
   },
-  statusStripContent: {
+  stripContent: {
     paddingHorizontal: 16,
-    gap: 8,
+    gap: 12,
   },
-  separator: {
-    height: 1,
-    backgroundColor: colors.gray100,
+  emptyBox: {
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: colors.gray200,
+    borderRadius: 12,
   },
-  footerLink: {
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: colors.gray200,
-  },
-  footerLinkText: {
+  link: {
     fontFamily: fonts.medium,
     fontSize: 14,
     color: colors.accent,

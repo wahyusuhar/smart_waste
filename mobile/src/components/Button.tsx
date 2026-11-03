@@ -4,7 +4,7 @@ import { colors, fonts, radius } from '../theme';
 
 type Props = Omit<PressableProps, 'style' | 'children'> & {
   title: string;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'danger' | 'inverse';
   loading?: boolean;
   loadingTitle?: string;
   style?: StyleProp<ViewStyle>;
@@ -37,6 +37,8 @@ const variants = {
   primary: { background: colors.accent, pressed: colors.accentPressed, border: colors.accent, text: colors.white },
   secondary: { background: colors.white, pressed: colors.gray50, border: colors.gray300, text: colors.gray700 },
   danger: { background: colors.white, pressed: colors.gray50, border: colors.gray300, text: colors.danger },
+  // White button on a teal block (the Beranda banner).
+  inverse: { background: colors.white, pressed: colors.accentSoft, border: colors.white, text: colors.accent },
 };
 
 const styles = StyleSheet.create({

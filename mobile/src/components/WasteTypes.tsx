@@ -1,26 +1,24 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, radius, type } from '../theme';
+import { colors, fonts, type } from '../theme';
 
-// Static content. The examples follow what the training data actually contains (ml/DATASET.md):
-// cardboard, for instance, is a separate class in the dataset and was not trained, so it is not listed.
+// Static content: photos from the demo data (web/database/seeders/photos), shrunk to 300 px.
 const TYPES = [
-  { icon: 'leaf-outline', label: 'Organik', examples: 'Sisa makanan, kulit buah, sayuran' },
-  { icon: 'bag-outline', label: 'Plastik', examples: 'Botol, kantong, kemasan' },
-  { icon: 'newspaper-outline', label: 'Kertas', examples: 'Koran, majalah, kertas bekas' },
-] as const;
+  { label: 'Organik', photo: require('../../assets/categories/organic.jpg') },
+  { label: 'Plastik', photo: require('../../assets/categories/plastic.jpg') },
+  { label: 'Kertas', photo: require('../../assets/categories/paper.jpg') },
+];
 
 export function WasteTypes() {
   return (
     <View>
-      <Text style={type.heading}>Jenis sampah yang dikenali</Text>
-      <View style={styles.grid}>
+      <Text style={type.heading}>Jenis sampah</Text>
+      <View style={styles.row}>
         {TYPES.map((item) => (
-          <View key={item.label} style={styles.card}>
-            <Ionicons name={item.icon} size={24} color={colors.gray700} />
+          <View key={item.label} style={styles.item}>
+            <Image source={item.photo} style={styles.photo} contentFit="cover" accessibilityLabel={`Contoh sampah ${item.label}`} />
             <Text style={styles.label}>{item.label}</Text>
-            <Text style={type.caption}>{item.examples}</Text>
           </View>
         ))}
       </View>
@@ -29,22 +27,24 @@ export function WasteTypes() {
 }
 
 const styles = StyleSheet.create({
-  grid: {
+  row: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
     marginTop: 12,
   },
-  card: {
+  item: {
     flex: 1,
-    padding: 12,
-    gap: 6,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.gray200,
-    borderRadius: radius.control,
+    alignItems: 'center',
+    gap: 8,
+  },
+  photo: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 16,
+    backgroundColor: colors.gray100,
   },
   label: {
-    fontFamily: fonts.semibold,
+    fontFamily: fonts.medium,
     fontSize: 14,
     lineHeight: 20,
     color: colors.gray900,
