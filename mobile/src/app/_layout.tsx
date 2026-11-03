@@ -60,6 +60,7 @@ function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
         {/* Welcome is listed first, so it is where a signed-out user lands (also after logout or a 401). */}
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="welcome" />
+          <Stack.Screen name="how-it-works" options={{ headerShown: true, title: 'Cara Kerja' }} />
           <Stack.Screen name="login" />
           <Stack.Screen name="register" />
         </Stack.Protected>
