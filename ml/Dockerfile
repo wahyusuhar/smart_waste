@@ -2,8 +2,11 @@
 # It sits in ml/ (not ml/api/) because Vercel's container runtime expects the Dockerfile at the project root.
 FROM python:3.11-slim
 
+# HOST and PORT can be overridden by the platform. 0.0.0.0 (IPv4) is what Vercel's proxy reaches;
+# Railway's private network needs HOST=:: because older Railway environments are IPv6-only.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    HOST=0.0.0.0 \
     PORT=8001
 
 WORKDIR /app
@@ -16,6 +19,5 @@ RUN pip install --no-cache-dir -r api/requirements.txt
 COPY api/main.py api/main.py
 COPY models/waste_classifier.tflite models/labels.json models/
 
-# The host sets $PORT; exec lets uvicorn receive the stop signal directly. "::" listens on IPv6 and IPv4,
-# which Railway's private network needs (older Railway environments are IPv6-only).
-CMD ["sh", "-c", "exec uvicorn main:app --app-dir api --host :: --port ${PORT}"]
+# exec lets uvicorn receive the stop signal directly.
+CMD ["sh", "-c", "exec uvicorn main:app --app-dir api --host ${HOST} --port ${PORT}"]
