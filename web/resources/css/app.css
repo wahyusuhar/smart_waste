@@ -33,3 +33,22 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Toast countdown: the toast closes when this animation ends, and hovering the toast pauses it. */
+@keyframes toast-countdown {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+.toast-countdown {
+    transform-origin: left;
+    animation: toast-countdown 5s linear forwards;
+}
+
+.toast:hover .toast-countdown {
+    animation-play-state: paused;
+}

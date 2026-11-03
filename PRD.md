@@ -90,6 +90,8 @@ smart-waste/
 
 User tidak bisa melihat laporan milik user lain, tidak bisa mengubah status, dan tidak bisa mengakses manajemen pengguna. Pembatasan ini dicek di sisi server (policy/middleware), tidak hanya dengan menyembunyikan tombol.
 
+**Pengecualian (4 November 2026, atas permintaan pemilik proyek):** halaman pembuka publik di `/` menampilkan maksimal 3 laporan terbaru berstatus **Selesai**, hanya berupa foto, kategori, alamat/patokan, tanggal selesai, catatan admin saat status diubah ke Selesai, waktu respon (selisih waktu dibuat dan waktu selesai), dan nomor laporan (`#SW-0021`). Kartu mengutamakan kategori yang berbeda. Nama pelapor, deskripsi, dan koordinat tidak ditampilkan dan tidak diambil dari database (`WelcomeController`). Halaman yang sama menampilkan jumlah laporan (total, selesai, diproses) dari database.
+
 ## 6. Kebutuhan fungsional
 
 ### 6.1 Website (Laravel + Livewire)
@@ -289,6 +291,15 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Beranda: tiga kotak "Jenis sampah" memakai foto asli dari data contoh (`web/database/seeders/photos`), dan kartu "Laporan terbaru" memakai foto laporan.
 - Ikon outline (Ionicons) di header Beranda (tombol profil) dan di langkah-langkah halaman Cara Kerja, selain di tab bar.
 - Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
+
+**Pengecualian yang disetujui (4 November 2026, website)**
+- Halaman pembuka untuk tamu di `/`: header lengket dengan menu jangkar (Beranda, Cara Kerja, Laporan, Jenis Sampah), foto laporan Selesai terbaru sebagai foto utama (ilustrasi `welcome.png` jika belum ada), judul, tiga langkah, tombol Masuk dan Daftar, kartu jumlah laporan (angka nyata), laporan Selesai terbaru (lihat pengecualian PRD §5), foto jenis sampah, satu blok teal polos berisi ajakan, footer empat kolom, dan link APK. Kartu memakai sudut 16 px dan bayangan halus. Tanpa foto stok, angka karangan, klaim instansi pemerintah, atau label versi.
+- Satu-satunya gradien: bayangan gelap tipis di bagian bawah foto utama halaman pembuka, hanya agar teks putih di atas foto tetap terbaca.
+- Logo: ikon tong sampah dari `mobile/assets/logo_smart-waste.png` (dipotong menjadi `web/public/images/logo-mark.png` dan `favicon.png`) di header dan footer halaman pembuka, sidebar, dan halaman Masuk/Daftar. Warna dan gradien bawaan logo dipertahankan sesuai pilihan pemilik proyek; di atas blok teal logo diberi kotak putih.
+- Halaman Masuk dan Daftar: blok teal polos dengan ilustrasi `welcome.png` (di atas pada HP, di kiri pada desktop) dan kartu form. Setelah keluar, pengguna diarahkan ke halaman pembuka, bukan ke halaman Masuk.
+- Ikon outline Lucide (SVG inline lewat komponen `x-icon`, tanpa paket) **hanya** di menu sidebar, di kartu statistik (dashboard dan halaman pembuka), di halaman pembuka (logo, menu, tombol, label foto, lokasi), serta di field dan tombol halaman Masuk dan Daftar (termasuk tombol tampilkan/sembunyikan password). Kotak ikon kartu statistik memakai warna status yang sama dengan badge.
+- Pesan berhasil (buat, ubah, hapus, pendaftaran) tampil sebagai toast. Toast memakai border tipis ditambah bayangan halus karena melayang di atas konten; komponen lain tetap hanya memakai border.
+- Aturan lain tetap berlaku: tanpa gradien (kecuali yang disebut di atas), glassmorphism, emoji, teks pemasaran, atau banner promo; satu warna aksen teal.
 
 ## 9. Deliverables
 
