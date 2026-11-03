@@ -1,0 +1,33 @@
+# EAS Build only needs mobile/. This file replaces every .gitignore for EAS uploads,
+# so the rules of the root .gitignore are copied here as well.
+.env
+.env.*
+!.env.example
+CLAUDE.md
+.claude/
+AGENTS.md
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+
+# Parts of the repository the APK build does not use
+/web/
+/ml/
+/docs/
+
+# From mobile/.gitignore
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/expo-env.d.ts
+mobile/android/
+mobile/ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+.env*.local
