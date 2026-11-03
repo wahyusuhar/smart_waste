@@ -250,6 +250,7 @@ Hal yang perlu diketahui saat mencoba demo:
 | [`docs/api.md`](docs/api.md) | Semua endpoint REST API: method, URL, header, body, contoh respons sukses dan error |
 | [`docs/erd.png`](docs/erd.png) | Diagram relasi tabel |
 | [`docs/erd.py`](docs/erd.py) | Skrip pembuat `erd.png` |
+| [`docs/welcome_illustration.py`](docs/welcome_illustration.py) | Skrip pembuat ilustrasi halaman Welcome (`mobile/assets/welcome.png`) |
 | [`ml/DATASET.md`](ml/DATASET.md) | Sumber, lisensi, dan pembagian dataset |
 
 `erd.png` digambar dengan matplotlib dari daftar tabel di `docs/erd.py`. Daftar itu disalin dari `web/database/migrations`, jadi perlu diperbarui jika migrasi berubah. Untuk membuat ulang gambarnya, jalankan dari root repository dengan venv training, yang sudah berisi matplotlib:
@@ -258,7 +259,13 @@ Hal yang perlu diketahui saat mencoba demo:
 ml\.venv\Scripts\python docs\erd.py
 ```
 
+Ilustrasi Welcome dibuat ulang dengan cara yang sama (butuh Pillow, juga sudah ada di venv training):
+
+```
+ml\.venv\Scripts\python docs\welcome_illustration.py
+```
+
 ## Kredit
 
-- Ilustrasi di halaman Welcome aplikasi mobile (`mobile/assets/welcome.png`) berasal dari [unDraw](https://undraw.co), dipakai sesuai lisensi unDraw yang membolehkan penggunaan gratis.
+- Ilustrasi di halaman Welcome aplikasi mobile (`mobile/assets/welcome.png`) dibuat sendiri untuk proyek ini dengan [`docs/welcome_illustration.py`](docs/welcome_illustration.py) (Pillow), bukan dari sumber luar.
 - Dataset: "Garbage Classification (12 classes)" oleh Mostafa Mohamed di Kaggle. Rinciannya di [`ml/DATASET.md`](ml/DATASET.md).
