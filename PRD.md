@@ -281,9 +281,10 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Lorem ipsum dan data palsu yang tidak masuk akal.
 
 **Pengecualian yang disetujui (3 November 2026, aplikasi mobile)**
-- Satu ilustrasi di halaman Welcome (`mobile/assets/welcome.png`), di atas latar putih. Ilustrasinya dibuat sendiri dengan `docs/welcome_illustration.py`, palet teal dan abu-abu.
-- Blok teal polos hanya di header Beranda. Halaman Welcome berlatar putih penuh; teal di sana hanya ada di ilustrasi dan tombol Masuk.
-- Ikon outline (Ionicons) di header Beranda (tombol profil) dan di grid "Jenis sampah yang dikenali", selain di tab bar.
+- Halaman pembuka (Welcome): bagian atas berlatar teal polos dengan satu ilustrasi (`mobile/assets/welcome.png`, dibuat sendiri dengan `docs/welcome_illustration.py`), bagian bawah kartu putih bersudut atas melengkung.
+- Beranda: satu banner teal polos (radius 16) berisi ajakan "Ada tumpukan sampah?", tombol "Buat Laporan", dan ilustrasi yang sama dalam ukuran kecil. Isinya ajakan membuat laporan, bukan promo, dan tidak berupa carousel.
+- Beranda: tiga kotak "Jenis sampah" memakai foto asli dari data contoh (`web/database/seeders/photos`), dan kartu "Laporan terbaru" memakai foto laporan.
+- Ikon outline (Ionicons) di header Beranda (tombol profil) dan di langkah-langkah halaman Cara Kerja, selain di tab bar.
 - Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
 
 ## 9. Deliverables
