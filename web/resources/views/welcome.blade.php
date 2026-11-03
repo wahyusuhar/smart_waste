@@ -32,7 +32,7 @@
 @endphp
 
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white">
-    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <a href="#beranda" class="flex items-center gap-3" @click="go('beranda')">
             <span class="flex size-10 items-center justify-center rounded-xl bg-accent text-white">
                 <x-icon name="leaf" class="size-5" />
@@ -76,16 +76,17 @@
 
 <main>
     <section id="beranda" class="scroll-mt-16">
-        <div class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:items-center lg:gap-14">
+        {{-- On desktop the hero fills exactly one screen below the 4rem header. --}}
+        <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:min-h-[calc(100svh-4rem)] lg:grid-cols-2 lg:items-center lg:gap-12 lg:px-8 lg:py-8">
             <div>
                 <p class="flex items-center gap-2 text-xs font-semibold tracking-widest text-accent uppercase">
                     <span class="flex size-6 items-center justify-center rounded-md bg-accent text-[10px] font-bold tracking-normal text-white">SW</span>
                     Smart Waste
                 </p>
-                <h1 class="mt-4 text-4xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">Laporkan tumpukan sampah di sekitar Anda</h1>
-                <p class="mt-4 text-base text-slate-600 sm:text-lg">Kirim foto dan lokasi GPS, kategori sampah dideteksi otomatis.</p>
+                <h1 class="mt-3 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl xl:text-5xl">Laporkan tumpukan sampah di sekitar Anda</h1>
+                <p class="mt-3 text-base text-slate-600">Kirim foto dan lokasi GPS, kategori sampah dideteksi otomatis.</p>
 
-                <ol id="cara-kerja" class="mt-8 scroll-mt-24 space-y-5">
+                <ol id="cara-kerja" class="mt-6 scroll-mt-24 space-y-4">
                     @foreach ($steps as $index => [$step, $detail])
                         <li class="flex gap-4">
                             <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-teal-50 text-sm font-bold text-accent">{{ $index + 1 }}</span>
@@ -97,7 +98,7 @@
                     @endforeach
                 </ol>
 
-                <div class="mt-8 grid gap-3 sm:grid-cols-2">
+                <div class="mt-6 grid gap-3 sm:grid-cols-2">
                     <a href="{{ route('login') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-white hover:bg-accent-hover">
                         <x-icon name="log-in" /> Masuk ke Akun
                     </a>
@@ -114,7 +115,7 @@
             @if ($hero)
                 {{-- The newest completed report. The dark fade is the page's only gradient, there so the white text stays readable on any photo (PRD §8). --}}
                 <figure class="relative overflow-hidden rounded-2xl bg-slate-100 shadow-xl">
-                    <img src="{{ $hero['photo_url'] }}" alt="Foto laporan yang sudah selesai" class="aspect-[4/3] w-full object-cover">
+                    <img src="{{ $hero['photo_url'] }}" alt="Foto laporan yang sudah selesai" class="aspect-[4/3] w-full object-cover lg:max-h-[calc(100svh-8rem)]">
                     <div class="absolute inset-x-4 top-4 flex flex-wrap justify-between gap-2">
                         <span class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-800">
                             <x-icon name="completed" class="size-3.5 text-completed-text" /> Laporan terselesaikan
@@ -141,7 +142,7 @@
     </section>
 
     <section class="bg-slate-50">
-        <div class="mx-auto grid max-w-6xl gap-5 px-4 py-16 sm:grid-cols-3 sm:px-6 md:py-24">
+        <div class="mx-auto grid max-w-7xl gap-5 px-4 py-16 sm:grid-cols-3 sm:px-6 lg:px-8 md:py-24">
             @foreach ([
                 ['total', $stats['total'], 'Total laporan', 'Laporan warga yang masuk'],
                 ['completed', $stats['completed'], 'Laporan selesai', $completedShare.'% dari total laporan'],
@@ -161,7 +162,7 @@
 
     {{-- Completed reports only, without reporter, description or coordinates (PRD §5 exception). --}}
     <section id="laporan" class="scroll-mt-16">
-        <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+        <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 md:py-24">
             <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                 <div>
                     <p class="flex items-center gap-2 text-xs font-semibold tracking-widest text-accent uppercase">
@@ -221,7 +222,7 @@
     </section>
 
     <section id="jenis-sampah" class="scroll-mt-16 bg-slate-50">
-        <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+        <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 md:py-24">
             <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Jenis Sampah yang Dikenali</h2>
             <p class="mt-2 text-slate-600">Deteksi otomatis memberi saran kategori; Anda dan petugas tetap bisa menggantinya.</p>
             <div class="mt-10 grid gap-6 sm:grid-cols-3">
@@ -238,7 +239,7 @@
         </div>
     </section>
 
-    <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 md:py-24">
         <div class="grid gap-8 rounded-2xl bg-accent p-6 sm:p-10 lg:grid-cols-5 lg:items-center">
             <div class="lg:col-span-3">
                 <p class="inline-flex items-center gap-2 rounded-full bg-teal-900/50 px-3 py-1 text-xs font-semibold tracking-widest text-teal-50 uppercase">
@@ -268,7 +269,7 @@
 </main>
 
 <footer class="border-t border-slate-200 bg-slate-50">
-    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:px-8 lg:grid-cols-4">
         <div>
             <p class="flex items-center gap-2.5">
                 <span class="flex size-8 items-center justify-center rounded-lg bg-accent text-white">
@@ -305,7 +306,7 @@
             <p class="mt-2 text-sm">Angka di halaman ini diambil dari database saat halaman dibuka.</p>
         </div>
     </div>
-    <div class="mx-auto flex max-w-6xl flex-col gap-2 border-t border-slate-200 px-4 py-6 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="mx-auto flex max-w-7xl flex-col gap-2 border-t border-slate-200 px-4 py-6 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <p>&copy; {{ now()->year }} Smart Waste</p>
         <a href="{{ $repoUrl }}" class="font-medium text-accent hover:text-accent-hover">GitHub</a>
     </div>
