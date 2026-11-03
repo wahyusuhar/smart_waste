@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ApiError, SERVER_ERROR_MESSAGE } from '../api/client';
@@ -10,6 +10,7 @@ import { Card } from '../components/Card';
 import { FormError } from '../components/States';
 import { TextField, type TextFieldRef } from '../components/TextField';
 import { colors, fonts, type } from '../theme';
+import { firstName } from '../utils/format';
 
 export default function RegisterScreen() {
   const { signUp } = useAuth();
@@ -42,6 +43,8 @@ export default function RegisterScreen() {
         password,
         password_confirmation: passwordConfirmation,
       });
+      // A system dialog, so it stays visible while the router switches to Beranda underneath.
+      Alert.alert('Pendaftaran berhasil', `Akun Anda sudah dibuat. Selamat datang, ${firstName(name)}.`);
     } catch (error) {
       if (error instanceof ApiError && error.status === 422) {
         setFieldErrors(error.fieldErrors);
