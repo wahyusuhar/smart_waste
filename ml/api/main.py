@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 from ai_edge_litert.interpreter import Interpreter
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
@@ -72,6 +72,12 @@ def preprocess(image: Image.Image) -> np.ndarray:
     # Must stay identical to load_image() in ml/train.py so serving matches training.
     image = image.convert("RGB").resize((IMAGE_SIZE, IMAGE_SIZE), Image.BILINEAR)
     return np.asarray(image, dtype=np.float32)[np.newaxis]
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    # The service has no page of its own; whoever opens its address lands on the Swagger docs.
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")

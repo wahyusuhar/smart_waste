@@ -25,6 +25,13 @@ def make_image(image_format):
     return buffer.getvalue()
 
 
+def test_root_redirects_to_swagger_docs(client):
+    response = client.get("/", follow_redirects=False)
+
+    assert response.status_code == 307
+    assert response.headers["location"] == "/docs"
+
+
 def test_health_reports_loaded_model(client):
     response = client.get("/health")
 
