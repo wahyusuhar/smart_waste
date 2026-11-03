@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Report;
+use Cloudinary\Cloudinary;
 use Illuminate\Console\Command;
 use Throwable;
 
@@ -20,15 +21,18 @@ class CheckPhotoDisk extends Command
 
     public function handle(): int
     {
+        $diskName = config('filesystems.photo_disk');
         $disk = Report::photoDisk();
-        $this->info('Disk foto: '.config('filesystems.photo_disk'));
+        $this->info("Disk foto: {$diskName}");
+
+        if (config("filesystems.disks.{$diskName}.driver") === 'cloudinary') {
+            $this->checkSdkDirectly();
+        }
 
         $ok = $this->check('Tulis foto sebagai stream (cara foto laporan disimpan)', function () use ($disk) {
             $path = 'checks/disk-check-'.now()->format('YmdHis').'.png';
 
-            $stream = fopen('php://temp', 'r+');
-            fwrite($stream, base64_decode(self::TEST_PNG));
-            rewind($stream);
+            $stream = $this->testPngStream();
             $disk->put($path, $stream);
             fclose($stream);
 
@@ -58,6 +62,50 @@ class CheckPhotoDisk extends Command
         return $ok ? self::SUCCESS : self::FAILURE;
     }
 
+    /**
+     * Calls the Cloudinary SDK without the package adapter, to tell a credentials problem apart from an
+     * adapter problem. Only informative: the result does not change the command's exit code.
+     */
+    private function checkSdkDirectly(): void
+    {
+        $cloudinary = app(Cloudinary::class);
+        $this->line('  Pemeriksaan SDK Cloudinary langsung (tanpa adapter):');
+
+        $variants = [
+            'stream tanpa nama file, seperti adapter paket (diharapkan GAGAL)' => [],
+            'stream dengan nama file, seperti adapter aplikasi (harus OK)' => ['filename' => 'sdk-check.png'],
+        ];
+
+        foreach ($variants as $label => $extraOptions) {
+            $this->check("SDK: {$label}", function () use ($cloudinary, $extraOptions) {
+                $publicId = 'checks/sdk-check-'.now()->format('YmdHis').'-'.count($extraOptions);
+
+                $stream = $this->testPngStream();
+                try {
+                    $cloudinary->uploadApi()->upload($stream, ['public_id' => $publicId] + $extraOptions);
+                } finally {
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+                }
+
+                $cloudinary->uploadApi()->destroy($publicId);
+            });
+        }
+    }
+
+    /**
+     * @return resource
+     */
+    private function testPngStream()
+    {
+        $stream = fopen('php://temp', 'r+');
+        fwrite($stream, base64_decode(self::TEST_PNG));
+        rewind($stream);
+
+        return $stream;
+    }
+
     private function check(string $label, callable $steps): bool
     {
         try {
@@ -66,6 +114,7 @@ class CheckPhotoDisk extends Command
 
             return true;
         } catch (Throwable $e) {
+            // Cloudinary's API errors carry the error message from the response body; they never contain the secret.
             $this->line("  [GAGAL] {$label}");
             $this->line('    '.$e::class.': '.$e->getMessage());
 
