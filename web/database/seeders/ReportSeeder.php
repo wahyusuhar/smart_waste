@@ -267,7 +267,7 @@ class ReportSeeder extends Seeder
 
         if ($pool === []) {
             $path = self::PHOTO_DIR."/report-{$index}.jpg";
-            Report::photoDisk()->put($path, $this->placeholderJpeg());
+            $this->putStream($path, $this->placeholderJpeg());
 
             return $path;
         }
@@ -277,9 +277,21 @@ class ReportSeeder extends Seeder
         $source = $pool[$cursor % count($pool)];
         $extension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
         $path = self::PHOTO_DIR."/report-{$index}.{$extension}";
-        Report::photoDisk()->put($path, file_get_contents($source));
+        $this->putStream($path, file_get_contents($source));
 
         return $path;
+    }
+
+    // Written as a stream, not a string: the Cloudinary SDK reads a string argument as a file path or
+    // URL, never as file contents, so put($path, $contents) fails on the cloudinary photo disk.
+    private function putStream(string $path, string $contents): void
+    {
+        $stream = fopen('php://temp', 'r+');
+        fwrite($stream, $contents);
+        rewind($stream);
+
+        Report::photoDisk()->put($path, $stream);
+        fclose($stream);
     }
 
     private function placeholderJpeg(): string
