@@ -6,11 +6,17 @@
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         <x-stat label="Total laporan" :value="$total" class="col-span-2 sm:col-span-1" />
         @foreach ($statuses as $item)
-            <x-stat :label="$item['status']->label()" :status="$item['status']" :value="$item['count']" />
+            <x-stat :label="$item['status']->label()" :status="$item['status']" :value="$item['count']" :total="$total" />
         @endforeach
     </div>
 
     <x-card title="Laporan terbaru" class="mt-6">
+        @if ($latestReports->isNotEmpty())
+            <x-slot:actions>
+                <a href="{{ route('reports.index') }}" class="text-sm font-medium text-accent hover:text-accent-hover">Lihat semua</a>
+            </x-slot:actions>
+        @endif
+
         @if ($latestReports->isEmpty())
             <x-empty-state message="Anda belum pernah membuat laporan.">
                 <x-button :href="route('reports.create')">Buat Laporan</x-button>

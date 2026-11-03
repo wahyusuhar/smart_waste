@@ -23,8 +23,9 @@ document.addEventListener('alpine:init', () => {
                                 data: values,
                                 backgroundColor: '#0f766e',
                                 hoverBackgroundColor: '#115e59',
-                                borderRadius: 2,
-                                maxBarThickness: 14,
+                                // Rounded like the dashboard cards (rounded-xl).
+                                borderRadius: 4,
+                                maxBarThickness: 16,
                             },
                         ],
                     },

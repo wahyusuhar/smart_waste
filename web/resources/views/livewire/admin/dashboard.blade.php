@@ -4,14 +4,14 @@
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         <x-stat label="Total laporan" :value="$total" class="col-span-2 sm:col-span-1" />
         @foreach ($statuses as $item)
-            <x-stat :label="$item['status']->label()" :status="$item['status']" :value="$item['count']" />
+            <x-stat :label="$item['status']->label()" :status="$item['status']" :value="$item['count']" :total="$total" />
         @endforeach
     </div>
 
     <div class="mt-6 grid gap-6 lg:grid-cols-3">
         <x-card title="Laporan per hari" class="lg:col-span-2">
             <x-slot:actions>
-                <span class="text-[13px] text-gray-500">30 hari terakhir</span>
+                <span class="rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600">30 hari terakhir</span>
             </x-slot:actions>
 
             @if (array_sum($chart['values']) === 0)
@@ -47,6 +47,10 @@
     </div>
 
     <x-card title="Laporan terbaru" class="mt-6">
+        <x-slot:actions>
+            <a href="{{ route('reports.index') }}" class="text-sm font-medium text-accent hover:text-accent-hover">Lihat semua</a>
+        </x-slot:actions>
+
         @if ($latestReports->isEmpty())
             <x-empty-state message="Belum ada laporan." />
         @else
