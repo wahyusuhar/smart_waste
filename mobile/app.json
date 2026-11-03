@@ -12,6 +12,7 @@
     },
     "android": {
       "package": "com.wahyu.smartwaste",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#0F766E",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -34,7 +35,8 @@
         "expo-image-picker",
         {
           "cameraPermission": "Smart Waste memakai kamera untuk memotret tumpukan sampah yang Anda laporkan.",
-          "photosPermission": "Smart Waste membuka galeri agar Anda bisa memilih foto tumpukan sampah."
+          "photosPermission": "Smart Waste membuka galeri agar Anda bisa memilih foto tumpukan sampah.",
+          "microphonePermission": false
         }
       ],
       [
