@@ -90,6 +90,8 @@ smart-waste/
 
 User tidak bisa melihat laporan milik user lain, tidak bisa mengubah status, dan tidak bisa mengakses manajemen pengguna. Pembatasan ini dicek di sisi server (policy/middleware), tidak hanya dengan menyembunyikan tombol.
 
+**Pengecualian (4 November 2026, atas permintaan pemilik proyek):** halaman pembuka publik di `/` menampilkan maksimal 3 laporan terbaru berstatus **Selesai**, hanya berupa foto, kategori, alamat/patokan, dan tanggal selesai. Nama pelapor, deskripsi, dan koordinat tidak ditampilkan dan tidak diambil dari database (`WelcomeController`). Halaman yang sama menampilkan jumlah laporan (total, selesai, diproses) dari database.
+
 ## 6. Kebutuhan fungsional
 
 ### 6.1 Website (Laravel + Livewire)
@@ -291,8 +293,9 @@ Tujuannya tampilan yang rapi dan fungsional, seperti aplikasi internal buatan ti
 - Aturan lain tetap berlaku: tanpa gradien, emoji, teks pemasaran, atau banner promo.
 
 **Pengecualian yang disetujui (4 November 2026, website)**
-- Halaman pembuka untuk tamu di `/`, sama seperti di aplikasi: blok teal polos dengan ilustrasi `welcome.png`, lalu judul, tiga langkah, tombol Masuk dan Daftar, dan link APK.
-- Ikon outline Lucide (SVG inline lewat komponen `x-icon`, tanpa paket) **hanya** di menu sidebar dan di kartu statistik dashboard. Kotak ikon kartu statistik memakai warna status yang sama dengan badge.
+- Halaman pembuka untuk tamu di `/`: foto asli dari data contoh, judul, tiga langkah, tombol Masuk dan Daftar, kartu jumlah laporan (angka nyata), laporan Selesai terbaru (lihat pengecualian PRD §5), foto jenis sampah, satu blok teal polos berisi ajakan, dan link APK. Tanpa foto stok, angka karangan, klaim instansi pemerintah, atau label versi.
+- Halaman Masuk dan Daftar: blok teal polos dengan ilustrasi `welcome.png` (di atas pada HP, di kiri pada desktop) dan kartu form. Setelah keluar, pengguna diarahkan ke halaman pembuka, bukan ke halaman Masuk.
+- Ikon outline Lucide (SVG inline lewat komponen `x-icon`, tanpa paket) **hanya** di menu sidebar, di kartu statistik (dashboard dan halaman pembuka), serta di field dan tombol halaman Masuk dan Daftar (termasuk tombol tampilkan/sembunyikan password). Kotak ikon kartu statistik memakai warna status yang sama dengan badge.
 - Pesan berhasil (buat, ubah, hapus, pendaftaran) tampil sebagai toast. Toast memakai border tipis ditambah bayangan halus karena melayang di atas konten; komponen lain tetap hanya memakai border.
 - Aturan lain tetap berlaku: tanpa gradien, glassmorphism, emoji, teks pemasaran, atau banner promo; satu warna aksen teal.
 
