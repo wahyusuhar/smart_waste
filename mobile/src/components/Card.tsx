@@ -9,7 +9,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-// Thin border and no shadow, like the cards on the website.
+// Thin border, 16 px corners, no shadow.
 export function Card({ title, children, style }: Props) {
   return (
     <View style={[styles.card, style]}>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.gray200,
-    borderRadius: radius.control,
+    borderRadius: radius.card,
     overflow: 'hidden',
   },
   header: {

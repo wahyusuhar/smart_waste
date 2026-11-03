@@ -40,7 +40,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 - Manajemen pengguna: tambah, ubah, hapus, cari.
 
 **User (aplikasi Android dan website)**
-- Halaman pembuka (di aplikasi dan website) dan halaman Cara Kerja di aplikasi, lalu register dan login. Halaman pembuka, Masuk, dan Daftar di website menampilkan link unduh APK.
+- Halaman pembuka dengan tiga langkah cara kerja (di aplikasi dan website), lalu register dan login. Halaman pembuka, Masuk, dan Daftar di website menampilkan link unduh APK.
 - Pesan berhasil setelah membuat, mengubah, atau menghapus data, dan setelah mendaftar, tampil sebagai notifikasi singkat (toast).
 - Buat laporan: foto dari kamera atau galeri, deteksi kategori otomatis yang bisa diganti, lokasi GPS, deskripsi, alamat/patokan opsional.
 - Riwayat dan detail laporan miliknya, termasuk status, catatan admin, dan riwayat status.

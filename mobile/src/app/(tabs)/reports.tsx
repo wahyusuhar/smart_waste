@@ -136,19 +136,19 @@ function Separator() {
 
 const styles = StyleSheet.create({
   content: {
-    paddingBottom: 16,
+    padding: 16,
   },
   emptyContent: {
     flexGrow: 1,
     justifyContent: 'center',
   },
+  // The list content already has 16 px side padding.
   banner: {
-    padding: 16,
+    paddingVertical: 12,
     gap: 12,
   },
   separator: {
-    height: 1,
-    backgroundColor: colors.gray100,
+    height: 12,
   },
   footer: {
     paddingVertical: 16,

@@ -1,4 +1,4 @@
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold, useFonts } from '@expo-google-fonts/inter';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -11,7 +11,7 @@ import { colors, fonts } from '../theme';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
+  const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold });
 
   return (
     <AuthProvider>
@@ -60,7 +60,6 @@ function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
 
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="welcome" />
-          <Stack.Screen name="how-it-works" options={{ headerShown: true, title: 'Cara Kerja' }} />
           <Stack.Screen name="login" />
           <Stack.Screen name="register" />
         </Stack.Protected>

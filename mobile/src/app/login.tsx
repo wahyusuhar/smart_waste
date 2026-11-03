@@ -1,15 +1,14 @@
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { ApiError, SERVER_ERROR_MESSAGE } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
+import { AuthLayout } from '../components/AuthLayout';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { FormError } from '../components/States';
 import { TextField, type TextFieldRef } from '../components/TextField';
-import { colors, fonts, type } from '../theme';
+import { colors, fonts, radius, type } from '../theme';
 
 export default function LoginScreen() {
   const { signIn } = useAuth();
@@ -41,104 +40,83 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          <Text style={styles.appName}>Smart Waste</Text>
+    <AuthLayout>
+      <View>
+        <View style={styles.titleRow}>
+          <Text style={type.title}>Masuk ke Akun</Text>
+          <Text style={styles.chip}>Warga & Admin</Text>
+        </View>
+        <Text style={[type.caption, styles.subtitle]}>Gunakan email dan password akun Anda.</Text>
+      </View>
 
-          <Card>
-            <View style={styles.form}>
-              <View>
-                <Text style={type.title}>Masuk</Text>
-                <Text style={[type.caption, styles.subtitle]}>Gunakan email dan password akun Anda.</Text>
-              </View>
+      {formError ? <FormError message={formError} /> : null}
 
-              {formError ? <FormError message={formError} /> : null}
+      <TextField
+        label="Email"
+        icon="mail-outline"
+        value={email}
+        onChangeText={setEmail}
+        error={fieldErrors.email}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+        editable={!submitting}
+      />
+      <TextField
+        ref={passwordRef}
+        label="Password"
+        icon="lock-closed-outline"
+        value={password}
+        onChangeText={setPassword}
+        error={fieldErrors.password}
+        secureTextEntry
+        autoComplete="current-password"
+        textContentType="password"
+        returnKeyType="go"
+        onSubmitEditing={submit}
+        editable={!submitting}
+      />
 
-              <TextField
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                error={fieldErrors.email}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                textContentType="emailAddress"
-                returnKeyType="next"
-                onSubmitEditing={() => passwordRef.current?.focus()}
-                editable={!submitting}
-              />
-              <TextField
-                ref={passwordRef}
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                error={fieldErrors.password}
-                secureTextEntry
-                autoComplete="current-password"
-                textContentType="password"
-                returnKeyType="go"
-                onSubmitEditing={submit}
-                editable={!submitting}
-              />
-
-              <Button title="Masuk" loadingTitle="Memproses…" loading={submitting} onPress={submit} />
-            </View>
-          </Card>
-
-          <View style={styles.switchRow}>
-            <Text style={styles.switchText}>Belum punya akun?</Text>
-            <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.push('/register')} disabled={submitting}>
-              <Text style={styles.switchLink}>Daftar</Text>
-            </Pressable>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      <View style={styles.actions}>
+        <Button title="Masuk Sekarang" icon="log-in-outline" loadingTitle="Memproses…" loading={submitting} onPress={submit} />
+        <Button
+          title="Daftar Akun Baru"
+          icon="person-add-outline"
+          variant="soft"
+          disabled={submitting}
+          onPress={() => router.push('/register')}
+        />
+      </View>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.gray50,
+  titleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
   },
-  flex: {
-    flex: 1,
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  appName: {
-    marginBottom: 24,
-    textAlign: 'center',
+  chip: {
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    backgroundColor: colors.accentSoft,
     fontFamily: fonts.semibold,
-    fontSize: 14,
-    color: colors.gray900,
-  },
-  form: {
-    padding: 24,
-    gap: 16,
+    fontSize: 12,
+    color: colors.accent,
+    overflow: 'hidden',
   },
   subtitle: {
     marginTop: 4,
   },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 4,
-    marginTop: 16,
-  },
-  switchText: {
-    fontFamily: fonts.regular,
-    fontSize: 14,
-    color: colors.gray600,
-  },
-  switchLink: {
-    fontFamily: fonts.medium,
-    fontSize: 14,
-    color: colors.accent,
+  actions: {
+    gap: 12,
+    marginTop: 4,
   },
 });

@@ -6,7 +6,7 @@ import { colors, fonts } from '../../theme';
 
 type IconName = keyof typeof Ionicons.glyphMap;
 
-// Icons appear in the tab bar, the Beranda header and the Cara Kerja steps (PRD §8 exception).
+// Icons appear in the tab bar, buttons, badges, cards and the Masuk/Daftar fields (PRD §8 exception).
 function tabIcon(name: IconName) {
   return function TabIcon({ color, size }: { color: ColorValue; size: number }) {
     // The tab bar passes one of the two tint colors set below, which are always hex strings.

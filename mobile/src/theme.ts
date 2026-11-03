@@ -46,9 +46,20 @@ export const categoryLabels: Record<ReportCategory, string> = {
   paper: 'Kertas',
 };
 
+// Ionicons per status, the counterpart of the website's Lucide icons on the stat cards.
+export const statusIcons: Record<ReportStatus, 'time-outline' | 'sync-outline' | 'checkmark-circle-outline' | 'close-circle-outline'> = {
+  pending: 'time-outline',
+  in_progress: 'sync-outline',
+  completed: 'checkmark-circle-outline',
+  rejected: 'close-circle-outline',
+};
+
 export const radius = {
   control: 6,
   badge: 4,
+  button: 12,
+  card: 16,
+  pill: 999,
 };
 
 export const spacing = {
@@ -64,11 +75,13 @@ export const fonts = {
   regular: 'Inter_400Regular',
   medium: 'Inter_500Medium',
   semibold: 'Inter_600SemiBold',
+  bold: 'Inter_700Bold',
+  extrabold: 'Inter_800ExtraBold',
 };
 
 export const type = {
-  title: { fontFamily: fonts.semibold, fontSize: 20, lineHeight: 28, color: colors.gray900 },
-  heading: { fontFamily: fonts.semibold, fontSize: 16, lineHeight: 24, color: colors.gray900 },
+  title: { fontFamily: fonts.extrabold, fontSize: 22, lineHeight: 28, color: colors.gray900 },
+  heading: { fontFamily: fonts.bold, fontSize: 16, lineHeight: 24, color: colors.gray900 },
   body: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.gray900 },
   label: { fontFamily: fonts.medium, fontSize: 14, lineHeight: 20, color: colors.gray700 },
   caption: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18, color: colors.gray500 },
