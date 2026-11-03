@@ -133,6 +133,9 @@ User tidak bisa melihat laporan milik user lain, tidak bisa mengubah status, dan
 **Responsive**
 - Semua halaman bisa dipakai di lebar 360px sampai desktop. Tabel di layar kecil boleh scroll horizontal di dalam kontainernya, halaman tidak boleh ikut scroll horizontal.
 
+**Tambahan atas permintaan pemilik proyek (3 November 2026)**
+- Halaman Masuk dan Daftar menampilkan link "Unduh aplikasi (APK)" ke file APK di GitHub Release. URL-nya diatur lewat env `MOBILE_APK_URL`; jika kosong, link tidak ditampilkan. APK tidak disimpan di web karena Vercel membatasi respons fungsi 4,5 MB.
+
 ### 6.2 REST API (Laravel, untuk mobile)
 
 Semua respons JSON. Auth memakai token Sanctum (header `Authorization: Bearer <token>`).
