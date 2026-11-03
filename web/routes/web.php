@@ -11,10 +11,11 @@ use App\Livewire\Reports\Show as ReportShow;
 use App\Livewire\User\Dashboard as UserDashboard;
 use Illuminate\Support\Facades\Route;
 
+// Guests see the opening page (the same one as in the Android app); signed-in users go to their dashboard.
 Route::get('/', function () {
     return auth()->check()
         ? redirect()->route(auth()->user()->dashboardRoute())
-        : redirect()->route('login');
+        : view('welcome');
 });
 
 Route::middleware('guest')->group(function () {

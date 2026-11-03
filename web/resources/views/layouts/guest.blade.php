@@ -9,7 +9,10 @@
 <body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
     <main class="flex min-h-screen items-center justify-center px-4 py-12">
         <div class="w-full max-w-sm">
-            <p class="mb-6 text-center text-sm font-semibold text-gray-900">Smart Waste</p>
+            <a href="{{ url('/') }}" class="mb-6 flex items-center justify-center gap-2.5">
+                <span class="flex size-7 items-center justify-center rounded-md bg-accent text-[11px] font-semibold text-white">SW</span>
+                <span class="text-sm font-semibold text-gray-900">Smart Waste</span>
+            </a>
             @yield('content')
         </div>
     </main>
