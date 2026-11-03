@@ -1,4 +1,5 @@
-# Production image for Render. Built from the web/ folder (see render.yaml).
+# Production image, built from the web/ folder. Follows Vercel's guide for Laravel in a container
+# (FrankenPHP, caches built into the image, nothing slow at startup); runs on Render or Railway too.
 
 # 1. PHP dependencies, without dev packages.
 FROM composer:2 AS vendor
@@ -16,34 +17,36 @@ COPY . .
 COPY --from=vendor /app/vendor/laravel/framework/src/Illuminate/Pagination/resources/views vendor/laravel/framework/src/Illuminate/Pagination/resources/views
 RUN npm run build
 
-# 3. Apache + PHP 8.2 running the app.
-FROM php:8.2-apache
+# 3. FrankenPHP (Caddy + PHP 8.2 in one process) running the app.
+FROM dunglas/frankenphp:1.13.4-php8.2-bookworm
 
-# gd (with JPEG) draws the seeder's placeholder photos; pdo_mysql talks to Aiven.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libjpeg62-turbo-dev libpng-dev unzip \
-    && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install pdo_mysql gd opcache \
-    && rm -rf /var/lib/apt/lists/*
+# pdo_mysql talks to Aiven. gd is not needed: the seeder, which draws placeholder photos, runs from a laptop.
+RUN install-php-extensions pdo_mysql opcache
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && a2enmod rewrite
-COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-smart-waste.ini
-COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+COPY docker/php.ini /usr/local/etc/php/conf.d/zz-smart-waste.ini
+COPY docker/Caddyfile /etc/caddy/Caddyfile
 
-# Render sends traffic to $PORT (10000 unless changed); Apache reads it when it starts.
-ENV PORT=10000
-RUN sed -i 's/^Listen 80$/Listen ${PORT}/' /etc/apache2/ports.conf
+# Vercel's filesystem is read-only apart from /tmp, so Caddy keeps its own state there.
+ENV XDG_CONFIG_HOME=/tmp/caddy/config \
+    XDG_DATA_HOME=/tmp/caddy/data
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-WORKDIR /var/www/html
+WORKDIR /app
 COPY --from=vendor /app/vendor vendor
 COPY . .
 COPY --from=assets /app/public/build public/build
 
-# The start script may arrive with Windows line endings if it was edited on Windows.
+# View and event caches need no runtime values, so they are built into the image. config:cache is left
+# out on purpose: the platform's env vars only exist at runtime. The start script may arrive with Windows
+# line endings. setcap lets FrankenPHP bind port 80 although it runs as www-data.
 RUN composer dump-autoload --optimize --no-dev --no-interaction \
+    && php artisan view:cache \
+    && php artisan event:cache \
     && sed -i 's/\r$//' docker/start.sh \
     && chmod +x docker/start.sh \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
+USER www-data
 CMD ["docker/start.sh"]

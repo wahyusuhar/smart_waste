@@ -1,0 +1,15 @@
+{
+	frankenphp
+	# HTTPS is terminated by the platform (Vercel, Render, Railway) in front of the container.
+	auto_https off
+	admin off
+}
+
+# All addresses, IPv4 included, on $PORT (80 when the platform does not set it).
+:{$PORT:80} {
+	root /app/public
+	encode zstd gzip
+	# One access line per request on stderr, so requests are visible in the platform's runtime logs.
+	log
+	php_server
+}
