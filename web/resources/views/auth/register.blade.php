@@ -27,4 +27,6 @@
         Sudah punya akun?
         <a href="{{ route('login') }}" class="font-medium text-accent hover:text-accent-hover">Masuk</a>
     </p>
+
+    <x-apk-download class="mt-2" />
 @endsection

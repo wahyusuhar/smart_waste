@@ -25,4 +25,6 @@
         Belum punya akun?
         <a href="{{ route('register') }}" class="font-medium text-accent hover:text-accent-hover">Daftar</a>
     </p>
+
+    <x-apk-download class="mt-2" />
 @endsection

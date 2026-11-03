@@ -35,6 +35,11 @@ return [
         ],
     ],
 
+    // Download link for the Android app (a GitHub Release asset). Empty hides the link on Login and Daftar.
+    'mobile' => [
+        'apk_url' => env('MOBILE_APK_URL'),
+    ],
+
     'ml' => [
         'url' => env('ML_SERVICE_URL', 'http://127.0.0.1:8001'),
         'timeout' => (int) env('ML_SERVICE_TIMEOUT', 10),
