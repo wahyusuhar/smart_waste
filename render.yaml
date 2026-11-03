@@ -7,7 +7,7 @@ services:
     runtime: docker
     plan: free
     region: singapore
-    dockerfilePath: ./ml/api/Dockerfile
+    dockerfilePath: ./ml/Dockerfile
     dockerContext: ./ml
     healthCheckPath: /health
     # Only rebuild when the service or its model changes.

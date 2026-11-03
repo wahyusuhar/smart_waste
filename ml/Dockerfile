@@ -1,4 +1,5 @@
-# Production image for Render, built with ml/ as the context (see render.yaml) so models/ can be copied.
+# Production image of the prediction service, built with ml/ as the context so models/ can be copied.
+# It sits in ml/ (not ml/api/) because Vercel's container runtime expects the Dockerfile at the project root.
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

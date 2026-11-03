@@ -222,7 +222,7 @@ Demo berjalan di layanan gratis:
 | Komponen | Layanan |
 |---|---|
 | Laravel | Render free, Docker (`web/Dockerfile`) |
-| FastAPI | Render free, Docker (`ml/api/Dockerfile`) |
+| FastAPI | Render free, Docker (`ml/Dockerfile`) |
 | Database | Aiven for MySQL, free tier |
 | Foto laporan | Cloudinary, free tier |
 
