@@ -10,7 +10,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 | APK Android | [diisi nanti] |
 | Video demo | [diisi nanti] |
 | Dokumentasi API | [`docs/api.md`](docs/api.md), Swagger FastAPI di `/docs` |
-| Skema database | [`docs/erd.png`](docs/erd.png), [`docs/schema.sql`](docs/schema.sql) |
+| Skema database | [`docs/erd.png`](docs/erd.png) |
 | Dataset | [`ml/DATASET.md`](ml/DATASET.md) |
 | Hasil evaluasi model | [`ml/reports/`](ml/reports/) |
 
@@ -82,7 +82,7 @@ User hanya bisa mengakses laporannya sendiri. Pembatasan ini dicek di server lew
 
 ```
 smart-waste/
-├── docs/            # api.md, erd.png, schema.sql
+├── docs/            # api.md, erd.png, erd.py
 ├── web/             # Laravel: website + REST API
 ├── mobile/          # Expo React Native
 ├── ml/
@@ -249,7 +249,6 @@ Hal yang perlu diketahui saat mencoba demo:
 | [`docs/api.md`](docs/api.md) | Semua endpoint REST API: method, URL, header, body, contoh respons sukses dan error |
 | [`docs/erd.png`](docs/erd.png) | Diagram relasi tabel |
 | [`docs/erd.py`](docs/erd.py) | Skrip pembuat `erd.png` |
-| [`docs/schema.sql`](docs/schema.sql) | Struktur database (tanpa data) |
 | [`ml/DATASET.md`](ml/DATASET.md) | Sumber, lisensi, dan pembagian dataset |
 
 `erd.png` digambar dengan matplotlib dari daftar tabel di `docs/erd.py`. Daftar itu disalin dari `web/database/migrations`, jadi perlu diperbarui jika migrasi berubah. Untuk membuat ulang gambarnya, jalankan dari root repository dengan venv training, yang sudah berisi matplotlib:
