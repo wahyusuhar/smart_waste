@@ -140,6 +140,8 @@ Kebutuhan: PHP 8.2 dengan ekstensi `pdo_mysql`, `gd`, dan `fileinfo`; Composer; 
 
 Data contoh berisi 1 admin, 4 user, dan 40 laporan di sekitar Wonosobo dengan status bervariasi. Fotonya diambil dari `web/database/seeders/photos/`. Nama file berawalan `organic`, `plastic`, atau `paper` dipasangkan ke laporan dengan kategori yang sama.
 
+Untuk mengisi ulang hanya laporan contoh tanpa menghapus akun pengguna (misalnya di database demo), jalankan `php artisan reports:reset-demo`. Perintah ini menghapus semua laporan, riwayat status, dan foto di folder `reports/` pada disk foto, termasuk laporan uji, lalu menjalankan ulang `ReportSeeder`. Sebelum menghapus, perintah menampilkan nama database dan meminta konfirmasi.
+
 ### 3. Aplikasi mobile (Expo)
 
 Untuk sekadar mencoba, pasang APK dari link di bagian atas. APK itu terhubung ke server demo. Langkah di bawah untuk menjalankan aplikasi dari kode sumber.
