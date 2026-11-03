@@ -8,6 +8,8 @@ export const colors = {
   accent: '#0f766e',
   accentPressed: '#115e59',
   accentSoft: '#f0fdfa',
+  // Secondary text on the teal blocks (Welcome, Beranda header); readable on the accent color.
+  accentTint: '#ccfbf1',
 
   white: '#ffffff',
   gray50: '#f9fafb',

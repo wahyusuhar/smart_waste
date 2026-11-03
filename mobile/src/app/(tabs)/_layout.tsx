@@ -6,7 +6,7 @@ import { colors, fonts } from '../../theme';
 
 type IconName = keyof typeof Ionicons.glyphMap;
 
-// Icons appear only here, in the tab bar.
+// Icons appear in the tab bar, the Beranda header and the waste type grid (PRD §8 exception).
 function tabIcon(name: IconName) {
   return function TabIcon({ color, size }: { color: ColorValue; size: number }) {
     // The tab bar passes one of the two tint colors set below, which are always hex strings.
@@ -28,7 +28,8 @@ export default function TabsLayout() {
         tabBarStyle: { borderTopColor: colors.gray200, backgroundColor: colors.white },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'Beranda', tabBarIcon: tabIcon('home-outline') }} />
+      {/* Beranda draws its own teal header with the greeting. */}
+      <Tabs.Screen name="index" options={{ title: 'Beranda', headerShown: false, tabBarIcon: tabIcon('home-outline') }} />
       <Tabs.Screen name="reports" options={{ title: 'Riwayat', tabBarIcon: tabIcon('document-text-outline') }} />
       <Tabs.Screen name="profile" options={{ title: 'Profil', tabBarIcon: tabIcon('person-outline') }} />
     </Tabs>
