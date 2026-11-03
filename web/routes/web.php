@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\WelcomeController;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\Users\Form as UserForm;
 use App\Livewire\Admin\Users\Index as UserIndex;
@@ -11,12 +12,8 @@ use App\Livewire\Reports\Show as ReportShow;
 use App\Livewire\User\Dashboard as UserDashboard;
 use Illuminate\Support\Facades\Route;
 
-// Guests see the opening page (the same one as in the Android app); signed-in users go to their dashboard.
-Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route(auth()->user()->dashboardRoute())
-        : view('welcome');
-});
+// Guests see the opening page; signed-in users go to their dashboard (WelcomeController).
+Route::get('/', WelcomeController::class);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SessionController::class, 'create'])->name('login');
