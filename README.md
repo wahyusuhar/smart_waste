@@ -6,11 +6,12 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 
 | | |
 |---|---|
-| Demo website | [diisi nanti] |
-| APK Android | [diisi nanti] |
+| Demo website | https://smart-waste-web1.vercel.app |
+| APK Android | https://github.com/wahyusuhar/smart_waste/releases/latest/download/smart-waste.apk |
 | Video demo | [diisi nanti] |
-| Dokumentasi API | [`docs/api.md`](docs/api.md), Swagger FastAPI di `/docs` |
-| Skema database | [`docs/erd.png`](docs/erd.png) |
+| Dokumentasi API | [`docs/api.md`](docs/api.md) |
+| API ML (Swagger) | https://smart-waste-ml.vercel.app/docs |
+| Skema database | [`docs/erd.png`](docs/erd.png), [`docs/schema.sql`](docs/schema.sql) |
 | Dataset | [`ml/DATASET.md`](ml/DATASET.md) |
 | Hasil evaluasi model | [`ml/reports/`](ml/reports/) |
 
@@ -39,7 +40,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 - Manajemen pengguna: tambah, ubah, hapus, cari.
 
 **User (aplikasi Android dan website)**
-- Register dan login.
+- Halaman pembuka dan halaman Cara Kerja di aplikasi, lalu register dan login. Halaman Masuk dan Daftar di website menampilkan link unduh APK.
 - Buat laporan: foto dari kamera atau galeri, deteksi kategori otomatis yang bisa diganti, lokasi GPS, deskripsi, alamat/patokan opsional.
 - Riwayat dan detail laporan miliknya, termasuk status, catatan admin, dan riwayat status.
 - Ubah atau hapus laporan sendiri selama statusnya masih Menunggu (website).
@@ -83,15 +84,16 @@ User hanya bisa mengakses laporannya sendiri. Pembatasan ini dicek di server lew
 
 ```
 smart-waste/
-├── docs/            # api.md, erd.png, erd.py
-├── web/             # Laravel: website + REST API
-├── mobile/          # Expo React Native
+├── docs/            # api.md, erd.png, erd.py, schema.sql, welcome_illustration.py
+├── web/             # Laravel: website + REST API (Dockerfile, docker/ untuk deploy)
+├── mobile/          # Expo React Native (eas.json untuk build APK)
 ├── ml/
+│   ├── Dockerfile   # image servis prediksi
 │   ├── train.py     # training dan evaluasi
 │   ├── models/      # waste_classifier.keras, waste_classifier.tflite, labels.json
 │   ├── reports/     # confusion matrix, classification report, grafik training
 │   └── api/         # FastAPI
-└── render.yaml      # Blueprint deploy Render
+└── render.yaml      # Blueprint Render, tidak dipakai (lihat bagian Deploy)
 ```
 
 ## Instalasi lokal
@@ -139,6 +141,8 @@ Data contoh berisi 1 admin, 4 user, dan 40 laporan di sekitar Wonosobo dengan st
 
 ### 3. Aplikasi mobile (Expo)
 
+Untuk sekadar mencoba, pasang APK dari link di bagian atas. APK itu terhubung ke server demo. Langkah di bawah untuk menjalankan aplikasi dari kode sumber.
+
 Kebutuhan: Node.js 20.19 atau lebih baru, aplikasi Expo Go (SDK 58) di HP Android, HP dan laptop di jaringan Wi-Fi yang sama.
 
 1. Jalankan Laravel agar bisa diakses dari HP:
@@ -156,6 +160,8 @@ Kebutuhan: Node.js 20.19 atau lebih baru, aplikasi Expo Go (SDK 58) di HP Androi
 3. Isi `EXPO_PUBLIC_API_URL` di `mobile/.env`, misalnya `http://192.168.1.5:8000/api` (lengkap dengan port).
 4. Jalankan `npx expo start`, lalu scan QR code dengan Expo Go. Setelah mengubah `.env`, jalankan ulang dengan `npx expo start --clear`.
 
+Untuk mencoba dengan server demo tanpa menjalankan Laravel, isi `EXPO_PUBLIC_API_URL=https://smart-waste-web1.vercel.app/api`.
+
 ### 4. Training ulang model (opsional)
 
 Kebutuhan: Python 3.11 dan dataset dari Kaggle (lihat [`ml/DATASET.md`](ml/DATASET.md)). Venv ini terpisah dari venv servis ML karena berisi TensorFlow penuh.
@@ -170,7 +176,7 @@ Training memakai seed 42 sehingga hasilnya dapat diulang. Di CPU laptop, satu ru
 
 ## Akun demo
 
-Semua akun memakai password `password`.
+Semua akun memakai password `password`, dan berlaku di demo website maupun APK.
 
 | Email | Peran |
 |---|---|
@@ -184,7 +190,7 @@ Semua akun memakai password `password`.
 
 - Transfer learning MobileNetV2 (pretrained ImageNet), input 224×224, augmentasi ringan pada data train.
 - Dataset: Kaggle "Garbage Classification" (12 kelas). Dipakai kelas `biological` (sebagai `organic`), `plastic`, dan `paper`, masing-masing 300 gambar, dibagi 70/15/15. Detail di [`ml/DATASET.md`](ml/DATASET.md).
-- Model diekspor ke `.keras` dan `.tflite`. Servis prediksi memakai `.tflite` dengan LiteRT supaya tidak perlu TensorFlow penuh dan muat di RAM 512 MB.
+- Model diekspor ke `.keras` dan `.tflite`. Servis prediksi memakai `.tflite` dengan LiteRT, sehingga tidak perlu TensorFlow penuh dan image-nya kecil.
 
 Hasil pada data test (135 gambar, tidak dipakai saat training maupun tuning):
 
@@ -217,22 +223,49 @@ Karena itu, hasil model diperlakukan sebagai **saran**, tidak langsung menjadi k
 
 ## Deploy
 
-Demo berjalan di layanan gratis:
+Demo berjalan di layanan gratis yang tidak meminta kartu kredit:
 
-| Komponen | Layanan |
-|---|---|
-| Laravel | Render free, Docker (`web/Dockerfile`) |
-| FastAPI | Render free, Docker (`ml/Dockerfile`) |
-| Database | Aiven for MySQL, free tier |
-| Foto laporan | Cloudinary, free tier |
+| Komponen | Layanan | Alamat |
+|---|---|---|
+| Laravel (website + REST API) | Vercel Hobby, container runtime, FrankenPHP (`web/Dockerfile`) | https://smart-waste-web1.vercel.app |
+| FastAPI | Vercel Hobby, container runtime (`ml/Dockerfile`) | https://smart-waste-ml.vercel.app |
+| Database | Aiven for MySQL, free tier (MySQL 8) | |
+| Foto laporan | Cloudinary, free tier | |
+| APK | EAS Build (profil `preview` di `mobile/eas.json`), dibagikan lewat GitHub Release | lihat tabel di atas |
 
-Kedua service didefinisikan di [`render.yaml`](render.yaml). Nilai rahasia (`APP_KEY`, kredensial database, `CLOUDINARY_URL`, `ML_SERVICE_TOKEN`) diisi di dashboard Render, dan sertifikat CA Aiven diunggah sebagai Secret File `ca.pem`. Saat container start, migrasi dijalankan otomatis. Seeder hanya dijalankan jika database masih kosong.
+**Kenapa Vercel.** Rencana awal memakai Render (lihat [`render.yaml`](render.yaml)), lalu Railway. Keduanya meminta kartu kredit, termasuk untuk layanan gratisnya, dan trial Railway sedang ditutup untuk akun baru. `render.yaml` dan dukungan Railway (env `HOST` di image ML, `MYSQL_CA_CERT_BASE64` di image web) tetap ada di repository sebagai dokumentasi, tetapi tidak dipakai.
+
+**Langkah deploy, ringkas:**
+1. Buat layanan MySQL di Aiven, catat host, port, user, dan password, lalu unduh sertifikat CA (`ca.pem`).
+2. Buat akun Cloudinary dan salin `CLOUDINARY_URL`.
+3. Isi tabel dan data contoh **sekali dari laptop**, dengan env Aiven dan Cloudinary di sesi PowerShell (env sesi mengalahkan `web/.env`):
+   ```
+   cd web
+   php artisan config:clear
+   $env:DB_HOST="..."; $env:DB_PORT="..."; $env:DB_DATABASE="defaultdb"; $env:DB_USERNAME="..."; $env:DB_PASSWORD="..."
+   $env:MYSQL_ATTR_SSL_CA="C:\path\ke\ca.pem"; $env:PHOTO_DISK="cloudinary"; $env:CLOUDINARY_URL="cloudinary://..."
+   php artisan photos:check-disk
+   php artisan migrate --seed --force
+   ```
+   Container tidak menjalankan migrasi saat start, karena di Vercel container baru bisa dinyalakan kapan saja.
+4. Project Vercel `smart-waste-ml`: Root Directory `ml`, env `ML_SERVICE_TOKEN`, Function Region Singapore (`sin1`).
+5. Project Vercel `smart-waste-web`: Root Directory `web`, Function Region `sin1`, dan env:
+   - `APP_KEY`, `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, `APP_LOCALE=id`, `LOG_CHANNEL=stderr`;
+   - `DB_*` dari Aiven dan `MYSQL_CA_CERT_BASE64` (isi `ca.pem` dalam base64, ditulis ke `/tmp` saat container start);
+   - `SESSION_DRIVER=database`, `CACHE_STORE=database`, `QUEUE_CONNECTION=sync`;
+   - `PHOTO_DISK=cloudinary`, `CLOUDINARY_URL`, `LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK=cloudinary`, `LIVEWIRE_TEMPORARY_FILE_UPLOAD_CLEANUP=false`;
+   - `ML_SERVICE_URL`, `ML_SERVICE_TOKEN` (sama dengan servis ML), `ML_SERVICE_TIMEOUT=30`;
+   - `MOBILE_APK_URL` (link APK di halaman Masuk dan Daftar).
+6. APK: `cd mobile` lalu `eas build -p android --profile preview`, kemudian unggah file APK ke GitHub Release dengan nama `smart-waste.apk`.
 
 Hal yang perlu diketahui saat mencoba demo:
-- **Cold start.** Service Render free tidur setelah 15 menit tanpa trafik, dan butuh sekitar satu menit untuk bangun lagi. Request pertama ke website bisa lambat.
-- **Deteksi AI pertama bisa gagal.** Servis ML tidur terpisah dari Laravel. Jika sedang tidur, deteksi pertama bisa menampilkan "Layanan deteksi AI sedang tidak tersedia". Tekan **Deteksi ulang** setelah beberapa detik, atau pilih kategori manual. Laravel juga membangunkan servis ML setiap kali Laravel sendiri start.
-- **Database bisa dimatikan.** Aiven dapat mematikan layanan free yang lama tidak dipakai, dan pemiliknya bisa menyalakannya kembali dari console.
-- **Penyimpanan foto.** Disk Render free terhapus setiap restart, sehingga foto disimpan di Cloudinary (`PHOTO_DISK=cloudinary`). Secara lokal, foto tetap di `storage/app/public`.
+- **Cold start.** Vercel menghentikan container setelah beberapa menit tanpa trafik. Request pertama setelahnya lebih lambat karena container dinyalakan ulang.
+- **Deteksi AI pertama bisa lambat atau gagal.** Servis ML juga berhenti saat idle. Jika muncul "Layanan deteksi AI sedang tidak tersedia", tekan **Deteksi ulang** setelah beberapa detik, atau pilih kategori manual. Laravel juga memanggil `/health` servis ML setiap kali container web start, supaya servis ML ikut bangun.
+- **Foto maksimal 4 MB.** Vercel membatasi body request 4,5 MB. Foto dari aplikasi mobile sudah dikompres sebelum dikirim, jadi batas ini hanya terasa di form website.
+- **Upload sementara di form website** disimpan di Cloudinary (folder `livewire-tmp`), karena request berikutnya bisa ditangani container lain. Filenya dihapus setelah laporan disimpan; upload yang tidak jadi dikirim tertinggal dan bisa dihapus manual dari Cloudinary.
+- **Adapter Cloudinary.** Paket `cloudinary-labs/cloudinary-laravel` gagal mengunggah isi file berupa string dan stream tanpa nama file, sehingga aplikasi memakai adapter sendiri (`web/app/Filesystem/CloudinaryAdapter.php`). `php artisan photos:check-disk` menguji koneksi ke disk foto yang sedang aktif.
+- **Database bisa dimatikan.** Aiven dapat mematikan layanan free yang lama tidak dipakai; pemiliknya bisa menyalakannya kembali dari console.
+- **Batas Vercel Hobby.** Untuk penggunaan personal dan non-komersial, dengan kuota bulanan. Container runtime Vercel masih berstatus beta.
 
 ## Testing
 
@@ -250,6 +283,7 @@ Hal yang perlu diketahui saat mencoba demo:
 | [`docs/api.md`](docs/api.md) | Semua endpoint REST API: method, URL, header, body, contoh respons sukses dan error |
 | [`docs/erd.png`](docs/erd.png) | Diagram relasi tabel |
 | [`docs/erd.py`](docs/erd.py) | Skrip pembuat `erd.png` |
+| [`docs/schema.sql`](docs/schema.sql) | Struktur database tanpa data, diambil dari MySQL 8.4 di Aiven dengan `php artisan db:dump-structure` |
 | [`docs/welcome_illustration.py`](docs/welcome_illustration.py) | Skrip pembuat ilustrasi halaman Welcome (`mobile/assets/welcome.png`) |
 | [`ml/DATASET.md`](ml/DATASET.md) | Sumber, lisensi, dan pembagian dataset |
 
@@ -264,6 +298,13 @@ Ilustrasi Welcome dibuat ulang dengan cara yang sama (butuh Pillow, juga sudah a
 ```
 ml\.venv\Scripts\python docs\welcome_illustration.py
 ```
+
+Perintah artisan pendukung, dijalankan dari folder `web`:
+
+| Perintah | Fungsi |
+|---|---|
+| `php artisan photos:check-disk` | Mengunggah, membaca, dan menghapus file uji di disk foto yang aktif (`PHOTO_DISK`) |
+| `php artisan db:dump-structure` | Menulis struktur tabel (tanpa data) dari koneksi MySQL yang aktif ke `docs/schema.sql` |
 
 ## Kredit
 
