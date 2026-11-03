@@ -142,19 +142,21 @@
     </section>
 
     <section class="bg-slate-50">
-        <div class="mx-auto grid max-w-7xl gap-5 px-4 py-16 sm:grid-cols-3 sm:px-6 lg:px-8 md:py-24">
+        <div class="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:grid-cols-3 sm:px-6 md:py-12 lg:px-8">
             @foreach ([
                 ['total', $stats['total'], 'Total laporan', 'Laporan warga yang masuk'],
                 ['completed', $stats['completed'], 'Laporan selesai', $completedShare.'% dari total laporan'],
                 ['in_progress', $stats['inProgress'], 'Sedang diproses', $inProgressShare.'% dari total laporan'],
             ] as [$icon, $value, $label, $note])
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-                    <span class="flex size-14 items-center justify-center rounded-xl bg-teal-50 text-accent">
-                        <x-icon :name="$icon" class="size-6" />
+                <div class="flex items-center gap-4 rounded-2xl bg-white px-5 py-4 shadow-sm ring-1 ring-slate-200">
+                    <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-accent">
+                        <x-icon :name="$icon" class="size-5" />
                     </span>
-                    <p class="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{{ number_format($value, 0, ',', '.') }}</p>
-                    <p class="mt-1 text-xs font-semibold tracking-widest text-accent uppercase">{{ $label }}</p>
-                    <p class="mt-1 text-sm text-slate-500">{{ $note }}</p>
+                    <div class="min-w-0">
+                        <p class="text-[11px] font-semibold tracking-widest text-accent uppercase">{{ $label }}</p>
+                        <p class="text-2xl font-extrabold tracking-tight text-slate-900 tabular-nums">{{ number_format($value, 0, ',', '.') }}</p>
+                        <p class="text-xs text-slate-500">{{ $note }}</p>
+                    </div>
                 </div>
             @endforeach
         </div>

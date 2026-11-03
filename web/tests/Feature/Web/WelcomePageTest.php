@@ -48,7 +48,11 @@ class WelcomePageTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSeeInOrder(['6', 'Total laporan', '1', 'Laporan selesai', '17% dari total laporan', '3', 'Sedang diproses', '50% dari total laporan']);
+            ->assertSeeInOrder([
+                'Total laporan', '>6<',
+                'Laporan selesai', '>1<', '17% dari total laporan',
+                'Sedang diproses', '>3<', '50% dari total laporan',
+            ], false);
     }
 
     public function test_shows_only_the_three_latest_completed_reports_without_reporter_or_description(): void
