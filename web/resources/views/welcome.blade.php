@@ -104,6 +104,11 @@
                     <a href="{{ route('register') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-50 px-5 text-sm font-semibold text-accent hover:bg-teal-100">
                         <x-icon name="user-plus" /> Daftar Akun Baru
                     </a>
+                    @if ($apkUrl)
+                        <a href="{{ $apkUrl }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:col-span-2">
+                            <x-icon name="download" /> Unduh Aplikasi Android (APK)
+                        </a>
+                    @endif
                 </div>
                 <p class="mt-4 flex items-center gap-2 text-sm text-slate-500">
                     <x-icon name="shield" class="text-accent" />
@@ -262,7 +267,9 @@
                 <p class="mt-1 text-sm text-slate-600">Lewat website ini atau aplikasi Android.</p>
                 <a href="{{ route('login') }}" class="mt-5 inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-semibold text-white hover:bg-accent-hover">Masuk &amp; Lapor</a>
                 @if ($apkUrl)
-                    <a href="{{ $apkUrl }}" class="mt-3 inline-block text-sm font-medium text-accent hover:text-accent-hover">Unduh APK</a>
+                    <a href="{{ $apkUrl }}" class="mt-3 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-teal-50 px-5 text-sm font-semibold text-accent hover:bg-teal-100">
+                        <x-icon name="download" /> Unduh APK
+                    </a>
                 @endif
             </div>
         </div>

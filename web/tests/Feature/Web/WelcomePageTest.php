@@ -116,6 +116,21 @@ class WelcomePageTest extends TestCase
             ->assertDontSee((string) $report->longitude);
     }
 
+    public function test_shows_the_apk_download_button_only_when_a_link_is_set(): void
+    {
+        config(['services.mobile.apk_url' => 'https://example.test/smart-waste.apk']);
+        $this->get('/')
+            ->assertOk()
+            ->assertSeeInOrder(['Masuk ke Akun', 'Daftar Akun Baru', 'Unduh Aplikasi Android (APK)'])
+            ->assertSee('https://example.test/smart-waste.apk');
+
+        config(['services.mobile.apk_url' => null]);
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('Unduh Aplikasi Android (APK)')
+            ->assertDontSee('Unduh APK');
+    }
+
     public function test_shows_an_empty_state_without_completed_reports(): void
     {
         $this->get('/')
