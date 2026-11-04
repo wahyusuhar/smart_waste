@@ -8,7 +8,7 @@ Dibuat untuk technical test Fullstack Developer, Bilcode Technology.
 |---|---|
 | Demo website | https://smart-waste-web1.vercel.app |
 | APK Android | https://github.com/wahyusuhar/smart_waste/releases/latest/download/smart-waste.apk |
-| Video demo | [diisi nanti] |
+| Video demo | https://drive.google.com/file/d/1vMZtcDwryhKZnRMgfO_VGvFDdhnZzYYC/view?usp=drive_link |
 | Dokumentasi API | [`docs/api.md`](docs/api.md) |
 | API ML (Swagger) | https://smart-waste-ml.vercel.app/docs |
 | Skema database | [`docs/erd.png`](docs/erd.png), [`docs/schema.sql`](docs/schema.sql) |
